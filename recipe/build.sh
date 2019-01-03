@@ -7,5 +7,5 @@ if [ -f "$BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-gcc" ]; then
 fi
 ghc-pkg recache
 cd cabal-install
-export EXTRA_CONFIGURE_OPTS="--extra-include-dirs=$PREFIX/include --extra-lib-dirs=$PREFIX/lib $EXTRA_CONFIGURE_OPTS";
+export EXTRA_CONFIGURE_OPTS="-threaded --extra-include-dirs=$PREFIX/include --extra-lib-dirs=$PREFIX/lib $EXTRA_CONFIGURE_OPTS";
 ./bootstrap.sh
