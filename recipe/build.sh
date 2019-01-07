@@ -11,10 +11,23 @@ echo "Content PREFIX bin"
 ls -lrt $PREFIX/bin
 echo "Content PREFIX lib"
 ls -lrt $PREFIX/lib
+echo "which ld"
+which ld
+echo "which gcc"
+which gcc
 if [ -f "$BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-gcc" ]; then
    export CC="x86_64-conda_cos6-linux-gnu-gcc"
    echo "Setting x86_64-conda_cos6-linux-gnu-gcc"
+   ln -s $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-ld $BUILD_PREFIX/bin/ld
+   ln -s $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-gcc $BUILD_PREFIX/bin/gcc
+else
+   export LD_LIBRARY_PATH="/lib64:$LD_LIBRARY_PATH"
+   export LIBRARY_PATH="/lib64:$LIBRARY_PATH"
 fi
+echo "which ld"
+which ld
+echo "which gcc"
+which gcc
 ghc-pkg recache
 cd cabal-install
 export EXTRA_CONFIGURE_OPTS="-threaded --extra-include-dirs=$PREFIX/include --extra-lib-dirs=$PREFIX/lib $EXTRA_CONFIGURE_OPTS";
