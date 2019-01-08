@@ -14,6 +14,8 @@ echo "Content PREFIX bin"
 ls -lrt $PREFIX/bin
 echo "Content PREFIX lib"
 ls -lrt $PREFIX/lib
+echo "Content PREFIX bin"
+ls -lrt $BUILD_PREFIX/bin
 echo "which ld"
 which ld
 echo "which gcc"
@@ -24,6 +26,7 @@ if [ -f "$BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-gcc" ]; then
    ln -s $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-ld $PREFIX/bin/ld
    ln -s $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-gcc $PREFIX/bin/gcc
 else
+   echo "Setting LD path"
    export LD_LIBRARY_PATH="/lib64:$LD_LIBRARY_PATH"
    export LIBRARY_PATH="/lib64:$LIBRARY_PATH"
 fi
