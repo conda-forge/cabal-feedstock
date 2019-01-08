@@ -16,10 +16,6 @@ echo "Content PREFIX lib"
 ls -lrt $PREFIX/lib
 echo "Content PREFIX bin"
 ls -lrt $BUILD_PREFIX/bin
-echo "which ld"
-which ld
-echo "which gcc"
-which gcc
 if [ -f "$BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-gcc" ]; then
    export CC="x86_64-conda_cos6-linux-gnu-gcc"
    echo "Setting x86_64-conda_cos6-linux-gnu-gcc"
