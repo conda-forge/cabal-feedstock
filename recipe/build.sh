@@ -18,8 +18,8 @@ which gcc
 if [ -f "$BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-gcc" ]; then
    export CC="x86_64-conda_cos6-linux-gnu-gcc"
    echo "Setting x86_64-conda_cos6-linux-gnu-gcc"
-   ln -s $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-ld $BUILD_PREFIX/bin/ld
-   ln -s $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-gcc $BUILD_PREFIX/bin/gcc
+   ln -s $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-ld $PREFIX/bin/ld
+   ln -s $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-gcc $PREFIX/bin/gcc
 else
    export LD_LIBRARY_PATH="/lib64:$LD_LIBRARY_PATH"
    export LIBRARY_PATH="/lib64:$LIBRARY_PATH"
