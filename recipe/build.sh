@@ -17,8 +17,9 @@ ls -lrt $PREFIX/lib
 echo "Content PREFIX bin"
 ls -lrt $BUILD_PREFIX/bin
 if [ -f "$BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-gcc" ]; then
+   x86_64-conda_cos6-linux-gnu-gcc --version
    export CC="x86_64-conda_cos6-linux-gnu-gcc"
-   echo "Setting x86_64-conda_cos6-linux-gnu-gcc"
+   echo "Setting x86_64-conda_cos6-linux-gnu-cc"
    ln -s $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-ld $PREFIX/bin/ld
    ln -s $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-gcc $PREFIX/bin/gcc
 else
@@ -32,7 +33,7 @@ echo "which gcc"
 which gcc
 ghc-pkg recache
 cd cabal-install
-export EXTRA_CONFIGURE_OPTS="--ghc-options="-threaded" --extra-include-dirs=$PREFIX/include --extra-lib-dirs=$PREFIX/lib $EXTRA_CONFIGURE_OPTS";
+export EXTRA_CONFIGURE_OPTS=" --ghc-options="-threaded" --extra-include-dirs=$PREFIX/include --extra-lib-dirs=$PREFIX/lib $EXTRA_CONFIGURE_OPTS";
 echo "Extra configure opts"
 echo "$EXTRA_CONFIGURE_OPTS"
 ./bootstrap.sh
