@@ -7,6 +7,9 @@ echo "CC"
 echo "$CC"
 echo "LD"
 echo "$LD"
+echo "PATH"
+echo "$PATH"
+export PATH="$PREFIX/bin:$PATH"
 echo "Content PREFIX bin"
 ls -lrt $PREFIX/bin
 echo "Content PREFIX lib"
@@ -30,7 +33,7 @@ echo "which gcc"
 which gcc
 ghc-pkg recache
 cd cabal-install
-export EXTRA_CONFIGURE_OPTS="-threaded --extra-include-dirs=$PREFIX/include --extra-lib-dirs=$PREFIX/lib $EXTRA_CONFIGURE_OPTS";
+export EXTRA_CONFIGURE_OPTS="--ghc-options="-threaded" --extra-include-dirs=$PREFIX/include --extra-lib-dirs=$PREFIX/lib $EXTRA_CONFIGURE_OPTS";
 echo "Extra configure opts"
 echo "$EXTRA_CONFIGURE_OPTS"
 ./bootstrap.sh
