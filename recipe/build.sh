@@ -16,12 +16,16 @@ echo "Content PREFIX lib"
 ls -lrt $PREFIX/lib
 echo "Content PREFIX bin"
 ls -lrt $BUILD_PREFIX/bin
+echo "ALL ENVS"
+env
+
 if [ -f "$BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-gcc" ]; then
    x86_64-conda_cos6-linux-gnu-gcc --version
-   export CC="x86_64-conda_cos6-linux-gnu-gcc"
+   export CC="gcc"
    echo "Setting x86_64-conda_cos6-linux-gnu-cc"
    ln -s $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-ld $PREFIX/bin/ld
    ln -s $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-gcc $PREFIX/bin/gcc
+   gcc --version
 else
    echo "Setting LD path"
    export LD_LIBRARY_PATH="/lib64:$LD_LIBRARY_PATH"
