@@ -11,8 +11,6 @@ ls -lrt $BUILD_PREFIX/bin
 echo "ALL ENVS"
 env
 printf "#include <iostream>\nusing namespace std;\nint main()\n{\n    cout << "Hello, World!";\n    return 0;\n}\n" > test.c
-x86_64-conda_cos6-linux-gnu-gcc -v test.c 
-x86_64-conda_cos6-linux-gnu-g++ -v test.c 
 if [ -f "$BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-gcc" ]; then
    echo "Setting x86_64-conda_cos6-linux-gnu-gcc"
    x86_64-conda_cos6-linux-gnu-gcc --version
@@ -21,7 +19,12 @@ if [ -f "$BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-gcc" ]; then
    ln -s $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-gcc $PREFIX/bin/gcc
    rm $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-cc
    cp $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-gcc $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-cc
+   echo "gcc version"
    gcc --version
+   #echo "gcc test"
+   #x86_64-conda_cos6-linux-gnu-gcc -v test.c 
+   echo "g++ test"
+   x86_64-conda_cos6-linux-gnu-g++ -v test.c 
    export EXTRA_CONFIGURE_OPTS=" --with-gcc=$BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-gcc --extra-include-dirs=$PREFIX/include --extra-lib-dirs=$PREFIX/lib $EXTRA_CONFIGURE_OPTS";
 else
    echo "Setting LD path"
