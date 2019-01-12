@@ -10,7 +10,7 @@ echo "Content PREFIX bin"
 ls -lrt $BUILD_PREFIX/bin
 echo "ALL ENVS"
 env
-printf "#include <iostream>\nusing namespace std;\nint main()\n{\n    cout << "Hello, World!";\n    return 0;\n}\n" > test.c
+printf "#include <iostream>\nusing namespace std;\nint main()\n{\n    cout << \"Hello, World\";\n    return 0;\n}\n" > test.c
 if [ -f "$BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-gcc" ]; then
    echo "Setting x86_64-conda_cos6-linux-gnu-gcc"
    x86_64-conda_cos6-linux-gnu-gcc --version
