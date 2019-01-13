@@ -14,13 +14,13 @@ printf "#include <iostream>\nusing namespace std;\nint main()\n{\n    cout << \"
 if [ -f "$BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-gcc" ]; then
    echo "Setting x86_64-conda_cos6-linux-gnu-gcc"
    x86_64-conda_cos6-linux-gnu-gcc --version
-   export CC="x86_64-conda_cos6-linux-gnu-gcc"
+   export CC="$BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-g++"
    ln -s $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-ld $PREFIX/bin/ld
-   ln -s $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-gcc $PREFIX/bin/gcc
+   ln -s $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-gcc $PREFIX/bin/++
    rm $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-cc
    cp $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-gcc $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-cc
    echo "gcc version"
-   gcc --version
+   g++ --version
    #echo "gcc test"
    #x86_64-conda_cos6-linux-gnu-gcc -v test.c 
    echo "g++ test"
