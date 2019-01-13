@@ -19,7 +19,7 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
   host:
-    - ghc
+    - ghc-bootstrap
     - zlib
     - gmp
 test:
