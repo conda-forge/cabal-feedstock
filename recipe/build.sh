@@ -41,4 +41,5 @@ ghc-pkg recache
 cd cabal-install
 echo "Extra configure opts"
 echo "$EXTRA_CONFIGURE_OPTS"
+sed -i -- 's/args="$args ${EXTRA_CONFIGURE_OPTS} ${VERBOSE}"/args="$args ${EXTRA_CONFIGURE_OPTS} ${VERBOSE}"\n  echo -e "$args"\n/g' bootstrap.sh
 ./bootstrap.sh
