@@ -32,7 +32,7 @@ export EXTRA_CONFIGURE_OPTS=" --with-gcc=$BUILD_PREFIX/bin/x86_64-conda_cos6-lin
 sed -i -- 's/${GHC} --make ${JOBS} ${PKG_DBS} Setup -o Setup/${GHC} -pgmc ${CC} -pgml ${LD} --make ${JOBS} ${PKG_DBS} Setup -o Setup/g' cabal-install/bootstrap.sh
 #echo "which ld"
 #which ld
-#echo "which gcc"
+
 #which gcc
 ghc-pkg recache
 cd cabal-install
