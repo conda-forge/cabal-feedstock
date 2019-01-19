@@ -2,8 +2,9 @@
 export LD_LIBRARY_PATH="$PREFIX/lib:$LD_LIBRARY_PATH"
 export LIBRARY_PATH="$PREFIX/lib:$LIBRARY_PATH"
 export C_INCLUDE_PATH="$PREFIX/include:$C_INCLUDE_PATH"
-export LDFLAGS=" -lgmp $LDFLAGS"
-echo $LDFLAGS
+#export LDFLAGS=" -lgmp $LDFLAGS"
+#echo $LDFLAGS
+export LD="x86_64-conda_cos6-linux-gnu-ld"
 #export CFFLAGS=""
 echo "Content PREFIX bin"
 ls -lrt $PREFIX/bin
