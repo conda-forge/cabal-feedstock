@@ -41,7 +41,7 @@ ln -s $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-ld $PREFIX/bin/ld
 #echo "g++ test"
 #x86_64-conda_cos6-linux-gnu-g++ -v test.c 
 #export EXTRA_CONFIGURE_OPTS=" --with-gcc=$BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-cc --extra-include-dirs=$PREFIX/include --extra-lib-dirs=$PREFIX/lib $EXTRA_CONFIGURE_OPTS";
-export EXTRA_CONFIGURE_OPTS=" --extra-include-dirs=$PREFIX/include --extra-lib-dirs=$PREFIX/lib $EXTRA_CONFIGURE_OPTS";
+export EXTRA_CONFIGURE_OPTS=" --extra-include-dirs=$PREFIX/include --extra-lib-dirs=$PREFIX/lib ";
 sed -i -- 's/collect2 //g' cabal-install/bootstrap.sh
 #sed -i -- 's/${GHC} --make ${JOBS} ${PKG_DBS} Setup -o Setup/${GHC} -optl " -lgmp" -pgmc ${CC} -pgml ${LD} --make ${JOBS} ${PKG_DBS} Setup -o Setup/g' cabal-install/bootstrap.sh
 #echo "which ld"
@@ -52,6 +52,7 @@ ghc-pkg recache
 cd cabal-install
 echo "Extra configure opts"
 echo "$EXTRA_CONFIGURE_OPTS"
+sed -i -- 's/export LD=$LINK/$LINK="$BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-ld"/g' bootstrap.sh
 sed -i -- 's/args="$args ${EXTRA_CONFIGURE_OPTS} ${VERBOSE}"/args="$args ${EXTRA_CONFIGURE_OPTS} ${VERBOSE}"\n echo -e "$args"\n/g' bootstrap.sh
 export GHC=`which ghc`
 strings $GHC
