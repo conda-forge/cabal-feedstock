@@ -20,6 +20,10 @@ echo "GCC version"
 x86_64-conda_cos6-linux-gnu-gcc --version
 echo "CC version"
 x86_64-conda_cos6-linux-gnu-cc --version
+echo "Collect2"
+x86_64-conda_cos6-linux-gnu-cc -print-prog-name=collect2
+echo "Collect2"
+x86_64-conda_cos6-linux-gnu-cc -print-prog-name=ld
 echo "LD version"
 x86_64-conda_cos6-linux-gnu-ld --version
 echo "LD help"
@@ -38,7 +42,7 @@ ln -s $BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-ld $PREFIX/bin/ld
 #x86_64-conda_cos6-linux-gnu-g++ -v test.c 
 #export EXTRA_CONFIGURE_OPTS=" --with-gcc=$BUILD_PREFIX/bin/x86_64-conda_cos6-linux-gnu-cc --extra-include-dirs=$PREFIX/include --extra-lib-dirs=$PREFIX/lib $EXTRA_CONFIGURE_OPTS";
 export EXTRA_CONFIGURE_OPTS=" --extra-include-dirs=$PREFIX/include --extra-lib-dirs=$PREFIX/lib $EXTRA_CONFIGURE_OPTS";
-sed -i -- 's/${GHC} --make ${JOBS} ${PKG_DBS} Setup -o Setup/${GHC} -optl " -lgmp" -pgmc ${CC} -pgml ${LD} --make ${JOBS} ${PKG_DBS} Setup -o Setup/g' cabal-install/bootstrap.sh
+#sed -i -- 's/${GHC} --make ${JOBS} ${PKG_DBS} Setup -o Setup/${GHC} -optl " -lgmp" -pgmc ${CC} -pgml ${LD} --make ${JOBS} ${PKG_DBS} Setup -o Setup/g' cabal-install/bootstrap.sh
 #echo "which ld"
 #which ld
 
