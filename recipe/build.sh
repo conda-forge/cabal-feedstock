@@ -15,6 +15,7 @@ ls -lrt $BUILD_PREFIX/bin
 #echo "ALL ENVS" 
 #env
 #printf "#include <iostream>\nusing namespace std;\nint main()\n{\n    cout << \"Hello, World\";\n    return 0;\n}\n" > test.c
+ghc-pkg describe rts
 echo "Setting x86_64-conda_cos6-linux-gnu-gcc"
 echo "GCC version"
 x86_64-conda_cos6-linux-gnu-gcc --version
