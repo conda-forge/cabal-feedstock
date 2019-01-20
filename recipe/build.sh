@@ -15,6 +15,7 @@ ls -lrt $BUILD_PREFIX/bin
 #echo "ALL ENVS" 
 #env
 #printf "#include <iostream>\nusing namespace std;\nint main()\n{\n    cout << \"Hello, World\";\n    return 0;\n}\n" > test.c
+ghc-pkg recache
 ghc-pkg describe rts
 ghc-pkg describe rts > rts.pkg
 sed -i -- 's/library-dirs: \$PREFIX\/lib\/ghc-8.2.2\/rts/library-dirs: \$PREFIX\/lib\/ghc-8.2.2\/rts \$PREFIX\/lib\//g' rts.pkg
