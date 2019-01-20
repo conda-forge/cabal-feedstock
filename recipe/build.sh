@@ -52,7 +52,7 @@ ghc-pkg recache
 cd cabal-install
 echo "Extra configure opts"
 echo "$EXTRA_CONFIGURE_OPTS"
-sed -i -- 's/export LD=$LINK/$LINK="$BUILD_PREFIX\/bin\/x86_64-conda_cos6-linux-gnu-ld"/g' bootstrap.sh
+sed -i -- 's/export LD=$LINK/LINK="$BUILD_PREFIX\/bin\/x86_64-conda_cos6-linux-gnu-ld"/g' bootstrap.sh
 sed -i -- 's/args="$args ${EXTRA_CONFIGURE_OPTS} ${VERBOSE}"/args="$args ${EXTRA_CONFIGURE_OPTS} ${VERBOSE}"\n echo -e "$args"\n/g' bootstrap.sh
 export GHC=`which ghc`
 strings $GHC
