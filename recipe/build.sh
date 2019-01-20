@@ -18,7 +18,7 @@ ls -lrt $BUILD_PREFIX/bin
 ghc-pkg recache
 ghc-pkg describe rts
 ghc-pkg describe rts > rts.pkg
-perl -pi -e 's/$PREFIX\/lib\/ghc-8.2.2\/rts/$PREFIX\/lib\/ghc-8.2.2\/rts ${pkgroot}\/../g' rts.pkg
+perl -pi -e 's/$PREFIX\/lib\/ghc-8.2.2\/rts/$PREFIX\/lib\/ghc-8.2.2\/rts \$\{pkgroot\}\/../g' rts.pkg
 cat rts.pkg
 ghc-pkg update rts.pkg
 echo "Setting x86_64-conda_cos6-linux-gnu-gcc"
