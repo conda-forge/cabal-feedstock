@@ -18,7 +18,7 @@ ls -lrt $BUILD_PREFIX/bin
 ghc-pkg recache
 ghc-pkg describe rts
 ghc-pkg describe rts > rts.pkg
-perl -pi -e 's/\$PREFIX\/lib\/ghc-8.2.2\/rts/\$PREFIX\/lib\/ghc-8.2.2\/rts \$PREFIX\/lib/g' rts.pkg
+perl -pi -e 's/$PREFIX\/lib\/ghc-8.2.2\/rts/$PREFIX\/lib\/ghc-8.2.2\/rts $PREFIX\/lib/g' rts.pkg
 cat rts.pkg
 ghc-pkg update rts.pkg
 echo "Setting x86_64-conda_cos6-linux-gnu-gcc"
@@ -60,7 +60,7 @@ echo "Extra configure opts"
 echo "$EXTRA_CONFIGURE_OPTS"
 sed -i -- 's/export LD=$LINK/LINK="$BUILD_PREFIX\/bin\/x86_64-conda_cos6-linux-gnu-ld"/g' bootstrap.sh
 #sed -i -- 's/args="$args ${EXTRA_CONFIGURE_OPTS} ${VERBOSE}"/args="$args ${EXTRA_CONFIGURE_OPTS} ${VERBOSE}"\n echo -e "$args"\n/g' bootstrap.sh
-#sed -i -- 's/${GHC} --make ${JOBS} ${PKG_DBS} Setup -o Setup/${GHC} -optl " -lgmp" -pgmc ${CC} -pgml ${LD} --make ${JOBS} ${PKG_DBS} Setup -o Setup/g' bootstrap.sh
+#sed -i -- 's/${GHC} -lgmp --make ${JOBS} ${PKG_DBS} Setup -o Setup/${GHC} -pgmc ${CC} -pgml ${LD} --make ${JOBS} ${PKG_DBS} Setup -o Setup/g' bootstrap.sh
 export GHC=`which ghc`
 strings $GHC
 ./bootstrap.sh --no-doc
