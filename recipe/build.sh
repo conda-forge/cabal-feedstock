@@ -17,7 +17,7 @@ ls -lrt $BUILD_PREFIX/bin
 #printf "#include <iostream>\nusing namespace std;\nint main()\n{\n    cout << \"Hello, World\";\n    return 0;\n}\n" > test.c
 ghc-pkg describe rts
 ghc-pkg describe rts > rts.pkg
-sed -i -- 's/library-dirs: $PREFIX\/lib\/ghc-8.2.2\/rts/library-dirs: $PREFIX\/lib\/ghc-8.2.2\/rts $PREFIX\/lib\//g' rts.pkg
+sed -i -- 's/library-dirs: \$PREFIX\/lib\/ghc-8.2.2\/rts/library-dirs: \$PREFIX\/lib\/ghc-8.2.2\/rts \$PREFIX\/lib\//g' rts.pkg
 cat rts.pkg
 ghc-pkg update rts.pkg
 echo "Setting x86_64-conda_cos6-linux-gnu-gcc"
