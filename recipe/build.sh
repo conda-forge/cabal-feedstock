@@ -11,7 +11,6 @@ echo "Content PREFIX lib"
 ls -lrt $PREFIX/lib
 echo "Content PREFIX bin"
 ls -lrt $BUILD_PREFIX/bin
-
 ghc-pkg recache
 ghc-pkg describe rts
 ghc-pkg describe rts > rts.pkg
