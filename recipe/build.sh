@@ -23,7 +23,7 @@ x86_64-conda_cos6-linux-gnu-ld --version
 echo "LD help"
 x86_64-conda_cos6-linux-gnu-ld --help
 export EXTRA_CONFIGURE_OPTS=" --extra-include-dirs=$PREFIX/include --extra-lib-dirs=$PREFIX/lib ";
-#sed -i -- 's/collect2 //g' cabal-install/bootstrap.sh
+sed -i -- 's/collect2 //g' cabal-install/bootstrap.sh
 ghc-pkg recache
 cd cabal-install
 echo "Extra configure opts"
