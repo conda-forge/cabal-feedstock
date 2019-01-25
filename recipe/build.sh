@@ -44,4 +44,3 @@ cat bootstrap.sh
 export GHC=`which ghc`
 strings $GHC
 ./bootstrap.sh --no-doc
-.
