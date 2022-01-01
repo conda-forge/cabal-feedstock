@@ -1,6 +1,6 @@
 {% set name = "cabal" %}
-{% set version = "2.4.1.0" %}
-{% set sha256 = "abe4838dc0ef2a25e482d02480cd89eda3f8ccf6d8c4edf2063ae5723d8f12b5" %}
+{% set version = "3.6.2.0" %}
+{% set sha256 = "dcf31e82cd85ea3236be18cc36c68058948994579ea7de18f99175821dbbcb64" %}
 
 package:
   name: {{ name|lower }}
@@ -11,8 +11,8 @@ source:
     sha256: {{ sha256 }}
 
 build:
-  number: 1000
-  skip: True  # [not linux]
+  number: 0
+  skip: true  # [not linux]
 
 requirements:
   build:
@@ -31,7 +31,7 @@ about:
   license: BSD 3-Clause
   license_family: BSD
   license_file: LICENSE
-  summary: 'cabal-install is the command line interface to Cabal and hackage.'
+  summary: cabal-install is the command line interface to Cabal and hackage.
 
   doc_url: https://www.haskell.org/cabal/index.html
   dev_url: https://github.com/haskell/cabal/tree/master/cabal-install
