@@ -1,6 +1,6 @@
 {% set name = "cabal" %}
-{% set version = "2.4.1.0" %}
-{% set sha256 = "abe4838dc0ef2a25e482d02480cd89eda3f8ccf6d8c4edf2063ae5723d8f12b5" %}
+{% set version = "3.0.0.0" %}
+{% set sha256 = "ae293c5ab2ab209d5e8178a7b76e4895025d149aff0de8f2bb340b106c4f3e31" %}
 
 package:
   name: {{ name|lower }}
@@ -11,7 +11,7 @@ source:
     sha256: {{ sha256 }}
 
 build:
-  number: 1000
+  number: 0
   skip: True  # [not linux]
 
 requirements:
