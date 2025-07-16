@@ -28,6 +28,7 @@ requirements:
     - pkg-config
     - ghc-bootstrap >=9.10.1
   host:
+    - zlib
   run:
 
 tests:

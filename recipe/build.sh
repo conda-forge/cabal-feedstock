@@ -41,5 +41,3 @@ cabal install \
   --allow-boot-library-installs \
   --minimize-conflict-set \
   cabal-install
-
-find ${PREFIX}/ghc-bootstrap/lib -name "package.cache*" -exec rm {} \;
