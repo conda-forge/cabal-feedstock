@@ -1,0 +1,47 @@
+context:
+  version: "3.14.2.0"
+  boot_version: "3.14.1.1"
+
+package:
+  name: cabal
+  version: ${{ version }}
+
+source:
+  - url: https://github.com/haskell/cabal/archive/refs/tags/cabal-install-v${{ version }}.tar.gz
+    sha256: c24784c3cfaea08f7a0cfcddba31672044dcab59f5c6bb58a82ddc7e4310badc
+  - url: https://downloads.haskell.org/~cabal/cabal-install-${{ boot_version }}/cabal-install-${{ boot_version }}-x86_64-linux-ubuntu22_04.tar.xz
+    sha256: 773633b5fff7f26abd6d9388b4ab7ef35b0cd544612ec34ab91ef9bc24438619
+    target_directory: bootstrap-cabal
+
+build:
+  number: 0
+  script:
+    env:
+      BOOT_VERSION: ${{ boot_version }}
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - ${{ stdlib('c') }}
+    - perl
+    - pkg-config
+    - ghc-bootstrap >=9.10.1
+  host:
+  run:
+
+tests:
+  - script: |
+      cabal --version
+
+about:
+  homepage: https://github.com/haskell/cabal
+  license: BSD-3-Clause
+  license_file: LICENSE
+  summary: 'cabal-install is the command line interface to Cabal and hackage.'
+  documentation: https://www.haskell.org/cabal/index.html
+  repository: https://github.com/haskell/cabal
+
+extra:
+  recipe-maintainers:
+    - eggzilla
