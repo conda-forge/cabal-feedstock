@@ -26,7 +26,6 @@ requirements:
     - libiconv
     - libffi
     - zlib
-  run:
 
 tests:
   - script: |
@@ -34,7 +33,6 @@ tests:
     requirements:
       run:
         - libiconv
-        # - zlib
 
 about:
   homepage: https://github.com/haskell/cabal
