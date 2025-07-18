@@ -21,10 +21,10 @@ get_fallback_url() {
       echo "https://downloads.haskell.org/~cabal/cabal-install-${version}/cabal-install-${version}-x86_64-linux-ubuntu20_04.tar.xz"
       ;;
     osx-64|darwin)
-      echo "https://downloads.haskell.org/~cabal/cabal-install-${version}/cabal-install-${version}-x86_64-apple-darwin.tar.xz"
+      echo "https://downloads.haskell.org/~cabal/cabal-install-${version}/cabal-install-${version}-x86_64-darwin.tar.xz"
       ;;
     win-64|mingw*|msys*|cygwin*)
-      echo "https://downloads.haskell.org/~cabal/cabal-install-${version}/cabal-install-${version}-x86_64-unknown-mingw32.tar.xz"
+      echo "https://downloads.haskell.org/~cabal/cabal-install-${version}/cabal-install-${version}-x86_64-windows.tar.xz"
       ;;
   esac
 }
