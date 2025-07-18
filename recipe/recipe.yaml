@@ -1,5 +1,6 @@
 context:
   version: "3.14.1.1"
+  ghc_version: "9.10.2"
 
 package:
   name: cabal
@@ -7,10 +8,13 @@ package:
 
 source:
   - url: https://github.com/haskell/cabal/archive/refs/tags/cabal-install-v${{ version }}.tar.gz
-    sha256: a79d90a4eefa1c55d10db78e252d5ea7fdf057bdb6bb7ab54743aec77208b506
+    sha256: a79d90a4eefa1c55d10db78e252d5ea7fdf057bdb6bb7ab54743aec77208b506 3.14.1.1
 
 build:
   number: 0
+  script:
+    env:
+      GHC_VERSION: ${{ ghc_version }}
 
 requirements:
   build:
@@ -19,8 +23,12 @@ requirements:
     - ${{ stdlib('c') }}
     - perl
     - pkg-config
-    - ghc >=9.10.1
+    - curl
+    - ghc ==${{ ghc_version }}
   host:
+    - gmp
+    - libiconv
+    - libffi
     - zlib
   run:
 
