@@ -84,12 +84,12 @@ EOF
     pushd fallback-cabal
 
     if curl -L -o "cabal-install-${PKG_VERSION}.tar.xz" "${FALLBACK_URL}"; then
-        echo "Downloaded fallback cabal-install-${PKG_VERSION}"
-        tar xf "cabal-install-${PKG_VERSION}.tar.xz" && chmod +x cabal
-        echo "Fallback installation successful"
+      echo "Downloaded fallback cabal-install-${PKG_VERSION}"
+      tar xf "cabal-install-${PKG_VERSION}.tar.xz" && chmod +x cabal
+      echo "Fallback installation successful"
     else
-        echo "Fallback download failed"
-        exit 1
+      echo "Fallback download failed"
+      exit 1
     fi
     popd
 
