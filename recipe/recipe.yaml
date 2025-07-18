@@ -21,18 +21,18 @@ requirements:
     - pkg-config
     - curl
     - ghc-bootstrap
-    - xz-tools
     - if: unix
       then:
         - file
         - tar
+        - xz-tools
       else:
         - m2-bash
         - m2-coreutils
         - m2-diffutils
         - m2-file
         - m2-grep
-        - m2-tar
+        # - m2-unzip
         - m2-which
   host:
     - gmp

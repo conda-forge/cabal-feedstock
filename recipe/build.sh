@@ -26,9 +26,6 @@ get_fallback_url() {
     win-64|mingw*|msys*|cygwin*)
       echo "https://downloads.haskell.org/~cabal/cabal-install-${version}/cabal-install-${version}-x86_64-unknown-mingw32.tar.xz"
       ;;
-    *)
-      echo "https://downloads.haskell.org/~cabal/cabal-install-${version}/cabal-install-${version}-x86_64-unknown-mingw32.tar.xz"
-      ;;
   esac
 }
 
@@ -36,23 +33,31 @@ get_fallback_url() {
 download_fallback_cabal() {
   local version="${1}"
   local url=$(get_fallback_url "${version}")
+  local filename=$(basename "${url}")
   
   echo "Downloading fallback cabal-install-${version}"
   mkdir -p fallback-cabal
   pushd fallback-cabal
   
-  if curl -L -o "cabal-install-${version}.tar.xz" "${url}"; then
+  if curl -L -o "${filename}" "${url}"; then
     echo "Downloaded fallback cabal-install-${version}"
-    # Check file type and extract accordingly
-    if file "cabal-install-${version}.tar.xz" | grep -q "XZ compressed"; then
-      xz -d "cabal-install-${version}.tar.xz" && tar xf "cabal-install-${version}.tar"
-    elif file "cabal-install-${version}.tar.xz" | grep -q "gzip compressed"; then
-      tar xzf "cabal-install-${version}.tar.xz"
-    else
-      # Try as regular tar
-      tar xf "cabal-install-${version}.tar.xz"
-    fi
-    chmod +x cabal
+    
+    # Extract based on file extension
+    case "${filename}" in
+      *.zip)
+        unzip -q "${filename}" && chmod +x cabal
+        ;;
+      *.tar.xz)
+        xz -d "${filename}" && tar xf "${filename%.xz}"
+        chmod +x cabal
+        ;;
+      *)
+        echo "Unknown file format: ${filename}"
+        popd
+        return 1
+        ;;
+    esac
+    
     echo "Fallback installation successful"
     popd
     export CABAL="${SRC_DIR}/fallback-cabal/cabal"
