@@ -21,6 +21,13 @@ requirements:
     - pkg-config
     - curl
     - ghc-bootstrap
+    - if: not unix
+      then:
+        - m2-bash
+        - m2-coreutils
+        - m2-diffutils
+        - m2-grep
+        - m2-which
   host:
     - gmp
     - libiconv
@@ -30,9 +37,9 @@ requirements:
 tests:
   - script: |
       cabal --version
-    requirements:
-      run:
-        - libiconv
+    # requirements:
+    #   run:
+    #     - libiconv
 
 about:
   homepage: https://github.com/haskell/cabal
