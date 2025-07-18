@@ -27,6 +27,29 @@ get_fallback_url() {
   esac
 }
 
+# Download and extract fallback cabal
+download_fallback_cabal() {
+  local version="${1}"
+  local url=$(get_fallback_url "${version}")
+  
+  echo "Downloading fallback cabal-install-${version}"
+  mkdir -p fallback-cabal
+  pushd fallback-cabal
+  
+  if curl -L -o "cabal-install-${version}.tar.xz" "${url}"; then
+    echo "Downloaded fallback cabal-install-${version}"
+    tar xf "cabal-install-${version}.tar.xz" && chmod +x cabal
+    echo "Fallback installation successful"
+    popd
+    export CABAL="${SRC_DIR}/fallback-cabal/cabal"
+    return 0
+  else
+    echo "Fallback download failed"
+    popd
+    return 1
+  fi
+}
+
 # Clean cabal environment
 clean_cabal() {
   "${CABAL}" clean
@@ -52,11 +75,17 @@ main() {
   ghc-pkg recache
 
   # Install bootstrapping cabal from conda-forge
-  conda create -n cabal_env -y -c conda-forge cabal
-  CABAL="conda run -n cabal_env cabal"
-  export CABAL
+  if ! conda create -n cabal_env -y -c conda-forge cabal; then
+    echo "Conda cabal install failed, downloading fallback cabal-install-${PKG_VERSION}"
+    if ! download_fallback_cabal "${PKG_VERSION}"; then
+      exit 1
+    fi
+  else
+    export CABAL="conda run -n cabal_env cabal"
+  fi
 
   echo "Bootstrap cabal version: $(${CABAL} --version)"
+  clean_cabal || true
 
   # Create project configuration
   cat > cabal.release.constraints.project << EOF
@@ -77,26 +106,12 @@ EOF
   # Try building with bootstrap cabal
   if ! install_cabal "${PREFIX}/bin"; then
     echo "Bootstrap build failed, downloading fallback cabal-install-${PKG_VERSION}"
-
-    # Download fallback version
-    FALLBACK_URL=$(get_fallback_url "${PKG_VERSION}")
-    mkdir -p fallback-cabal
-    pushd fallback-cabal
-
-    if curl -L -o "cabal-install-${PKG_VERSION}.tar.xz" "${FALLBACK_URL}"; then
-      echo "Downloaded fallback cabal-install-${PKG_VERSION}"
-      tar xf "cabal-install-${PKG_VERSION}.tar.xz" && chmod +x cabal
-      echo "Fallback installation successful"
-    else
-      echo "Fallback download failed"
+    
+    if ! download_fallback_cabal "${PKG_VERSION}"; then
       exit 1
     fi
-    popd
-
-    # Use fallback cabal to build final version
-    export CABAL="${SRC_DIR}/fallback-cabal/cabal"
+    
     clean_cabal
-
     echo "Building from source"
     install_cabal "${PREFIX}/bin"
   fi
