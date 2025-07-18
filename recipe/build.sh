@@ -52,8 +52,8 @@ main() {
   ghc-pkg recache
 
   # Install bootstrapping cabal from conda-forge
-  micromamba create -n cabal_env -y -c conda-forge cabal
-  CABAL="micromamba run -n cabal_env cabal"
+  conda create -n cabal_env -y -c conda-forge cabal
+  CABAL="conda run -n cabal_env cabal"
   export CABAL
 
   echo "Bootstrap cabal version: $(${CABAL} --version)"
