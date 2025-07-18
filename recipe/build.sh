@@ -38,7 +38,8 @@ download_fallback_cabal() {
   
   if curl -L -o "cabal-install-${version}.tar.xz" "${url}"; then
     echo "Downloaded fallback cabal-install-${version}"
-    tar xf "cabal-install-${version}.tar.xz" && chmod +x cabal
+    xz -d "cabal-install-${version}.tar.xz" && tar xf "cabal-install-${version}.tar"
+    chmod +x cabal
     echo "Fallback installation successful"
     popd
     export CABAL="${SRC_DIR}/fallback-cabal/cabal"

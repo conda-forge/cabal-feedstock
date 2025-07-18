@@ -21,7 +21,7 @@ requirements:
     - pkg-config
     - curl
     - ghc-bootstrap
-    - xz
+    - xz-tools
     - if: unix
       then:
         - tar
