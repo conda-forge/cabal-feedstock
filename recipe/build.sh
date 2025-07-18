@@ -52,7 +52,7 @@ main() {
   ghc-pkg recache
 
   # Install bootstrapping cabal from conda-forge
-  micromamba create -n cabal_env -y -c conda-forge cabal >& /dev/null
+  micromamba create -n cabal_env -y -c conda-forge cabal
   CABAL="micromamba run -n cabal_env cabal"
   export CABAL
 
