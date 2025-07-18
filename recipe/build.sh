@@ -38,7 +38,15 @@ download_fallback_cabal() {
   
   if curl -L -o "cabal-install-${version}.tar.xz" "${url}"; then
     echo "Downloaded fallback cabal-install-${version}"
-    xz -d "cabal-install-${version}.tar.xz" && tar xf "cabal-install-${version}.tar"
+    # Check file type and extract accordingly
+    if file "cabal-install-${version}.tar.xz" | grep -q "XZ compressed"; then
+      xz -d "cabal-install-${version}.tar.xz" && tar xf "cabal-install-${version}.tar"
+    elif file "cabal-install-${version}.tar.xz" | grep -q "gzip compressed"; then
+      tar xzf "cabal-install-${version}.tar.xz"
+    else
+      # Try as regular tar
+      tar xf "cabal-install-${version}.tar.xz"
+    fi
     chmod +x cabal
     echo "Fallback installation successful"
     popd
