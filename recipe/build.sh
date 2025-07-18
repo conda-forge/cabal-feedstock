@@ -14,12 +14,17 @@ unset host_alias
 # Determine fallback URL based on platform
 get_fallback_url() {
   local version="${1}"
-  case "${build_platform}" in
-    linux-64)
+  local platform="${build_platform:-$(uname -s | tr '[:upper:]' '[:lower:]')}"
+  
+  case "${platform}" in
+    linux-64|linux)
       echo "https://downloads.haskell.org/~cabal/cabal-install-${version}/cabal-install-${version}-x86_64-linux-ubuntu20_04.tar.xz"
       ;;
-    osx-64)
+    osx-64|darwin)
       echo "https://downloads.haskell.org/~cabal/cabal-install-${version}/cabal-install-${version}-x86_64-apple-darwin.tar.xz"
+      ;;
+    win-64|mingw*|msys*|cygwin*)
+      echo "https://downloads.haskell.org/~cabal/cabal-install-${version}/cabal-install-${version}-x86_64-unknown-mingw32.tar.xz"
       ;;
     *)
       echo "https://downloads.haskell.org/~cabal/cabal-install-${version}/cabal-install-${version}-x86_64-unknown-mingw32.tar.xz"
