@@ -76,29 +76,29 @@ EOF
 
   # Try building with bootstrap cabal
   if ! install_cabal "${PREFIX}/bin"; then
-      echo "Bootstrap build failed, downloading fallback cabal-install-${PKG_VERSION}"
+    echo "Bootstrap build failed, downloading fallback cabal-install-${PKG_VERSION}"
 
-      # Download fallback version
-      FALLBACK_URL=$(get_fallback_url "${PKG_VERSION}")
-      mkdir -p fallback-cabal
-      pushd fallback-cabal
+    # Download fallback version
+    FALLBACK_URL=$(get_fallback_url "${PKG_VERSION}")
+    mkdir -p fallback-cabal
+    pushd fallback-cabal
 
-      if curl -L -o "cabal-install-${PKG_VERSION}.tar.xz" "${FALLBACK_URL}"; then
-          echo "Downloaded fallback cabal-install-${PKG_VERSION}"
-          tar xf "cabal-install-${PKG_VERSION}.tar.xz" && chmod +x cabal
-          echo "Fallback installation successful"
-      else
-          echo "Fallback download failed"
-          exit 1
-      fi
-      popd
+    if curl -L -o "cabal-install-${PKG_VERSION}.tar.xz" "${FALLBACK_URL}"; then
+        echo "Downloaded fallback cabal-install-${PKG_VERSION}"
+        tar xf "cabal-install-${PKG_VERSION}.tar.xz" && chmod +x cabal
+        echo "Fallback installation successful"
+    else
+        echo "Fallback download failed"
+        exit 1
+    fi
+    popd
 
-      # Use fallback cabal to build final version
-      export CABAL="${SRC_DIR}/fallback-cabal/cabal"
-      clean_cabal
+    # Use fallback cabal to build final version
+    export CABAL="${SRC_DIR}/fallback-cabal/cabal"
+    clean_cabal
 
-      echo "Building from source"
-      install_cabal "${PREFIX}/bin"
+    echo "Building from source"
+    install_cabal "${PREFIX}/bin"
   fi
 
   # Verify installation
