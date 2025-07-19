@@ -95,7 +95,7 @@ main() {
   ghc-pkg recache
   
   # Configure GHC for Windows ar compatibility
-  if [[ [[ "${target_platform}" == win-* ]]; then
+  if [[ "${target_platform}" == win-* ]]; then
     export CABAL_CONFIG_FLAGS="--configure-option=--with-ar=${AR} --configure-option=--ar-options=qc"
   fi
 
