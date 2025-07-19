@@ -94,15 +94,21 @@ main() {
   # Initialize package database
   ghc-pkg recache
   
-  # Configure GHC for Windows ar compatibility
+  # Configure GHC for Windows compatibility
   if [[ "${target_platform}" == win-* ]]; then
-  export CC=${GCC}
-    #export CABAL_CONFIG_FLAGS="--configure-option=--with-ar=${AR} --configure-option=--ar-options=qc"
-  perl -i -pe 's/PREFIX/BUILD_PREFIX/g' "${BUILD_PREFIX}"/ghc-bootstrap/bin/windres.bat
-  perl -i -pe 's/("ar command", ")([^"]*)"/\1x86_64-w64-mingw32-ar.exe"/g' "${BUILD_PREFIX}"/ghc-bootstrap/lib/settings
-  perl -i -pe 's/("ar flags", ")([^"]*)"/\1qc"/g' "${BUILD_PREFIX}"/ghc-bootstrap/lib/settings
-  perl -i -pe 's/("ar supports -L", ")([^"]*)"/\1NO"/g' "${BUILD_PREFIX}"/ghc-bootstrap/lib/settings
-
+    export CC=${GCC}
+    
+    # Fix windres path
+    perl -i -pe 's/PREFIX/BUILD_PREFIX/g' "${BUILD_PREFIX}"/ghc-bootstrap/bin/windres.bat
+    
+    # Update GHC settings for Windows toolchain compatibility
+    perl -i -pe 's/("ar command", ")([^"]*)"/\1x86_64-w64-mingw32-ar.exe"/g' "${BUILD_PREFIX}"/ghc-bootstrap/lib/settings
+    perl -i -pe 's/("ar flags", ")([^"]*)"/\1qc"/g' "${BUILD_PREFIX}"/ghc-bootstrap/lib/settings
+    perl -i -pe 's/("ar supports -L", ")([^"]*)"/\1NO"/g' "${BUILD_PREFIX}"/ghc-bootstrap/lib/settings
+    
+    # Force use of GNU ld instead of lld to avoid relocation type 0xe errors
+    perl -i -pe 's/("Merge objects command", ")([^"]*)"/\1x86_64-w64-mingw32-ld.exe"/g' "${BUILD_PREFIX}"/ghc-bootstrap/lib/settings
+    perl -i -pe 's/("C compiler link flags", ")([^"]*)"/\1-fuse-ld=bfd"/g' "${BUILD_PREFIX}"/ghc-bootstrap/lib/settings
   fi
 
   # Install bootstrapping cabal from conda-forge
