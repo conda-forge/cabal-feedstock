@@ -85,6 +85,7 @@ install_cabal() {
     --installdir="${install_dir}" \
     --install-method=copy \
     --minimize-conflict-set \
+    ${CABAL_CONFIG_FLAGS:-} \
     cabal-install -v3
 }
 
@@ -92,6 +93,11 @@ install_cabal() {
 main() {
   # Initialize package database
   ghc-pkg recache
+  
+  # Configure GHC for Windows ar compatibility
+  if [[ "${build_platform}" == win-* ]] || [[ "${platform}" == win-* ]] || [[ "${platform}" == mingw* ]]; then
+    export CABAL_CONFIG_FLAGS="--configure-option=--with-ar=${AR} --configure-option=--ar-options=qc"
+  fi
 
   # Install bootstrapping cabal from conda-forge
   if ! conda create -n cabal_env -y -c conda-forge cabal; then
