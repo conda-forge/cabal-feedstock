@@ -108,7 +108,13 @@ main() {
     
     # Force use of GNU ld instead of lld to avoid relocation type 0xe errors
     perl -i -pe 's/("Merge objects command", ")([^"]*)"/\1x86_64-w64-mingw32-ld.exe"/g' "${BUILD_PREFIX}"/ghc-bootstrap/lib/settings
-    perl -i -pe 's/("C compiler link flags", ")([^"]*)"/\1-fuse-ld=bfd"/g' "${BUILD_PREFIX}"/ghc-bootstrap/lib/settings
+    
+    # Set up proper library paths for GHC runtime
+    export LIBRARY_PATH="${BUILD_PREFIX}/ghc-bootstrap/lib/ghc-*/lib:${LIBRARY_PATH:-}"
+    export LD_LIBRARY_PATH="${BUILD_PREFIX}/ghc-bootstrap/lib/ghc-*/lib:${LD_LIBRARY_PATH:-}"
+    
+    # Configure cabal for static linking on Windows
+    export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-static"
   fi
 
   # Install bootstrapping cabal from conda-forge
