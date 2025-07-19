@@ -96,6 +96,7 @@ main() {
   
   # Configure GHC for Windows ar compatibility
   if [[ "${target_platform}" == win-* ]]; then
+  export CC=${GCC}
     #export CABAL_CONFIG_FLAGS="--configure-option=--with-ar=${AR} --configure-option=--ar-options=qc"
   perl -i -pe 's/("ar command", ")([^"]*)"/\1x86_64-w64-mingw32-ar.exe"/g' "${BUILD_PREFIX}"/ghc-bootstrap/lib/settings
   perl -i -pe 's/("ar flags", ")([^"]*)"/\1qc"/g' "${BUILD_PREFIX}"/ghc-bootstrap/lib/settings
