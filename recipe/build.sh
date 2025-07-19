@@ -14,7 +14,7 @@ unset host_alias
 # Determine fallback URL based on platform
 get_fallback_url() {
   local version="${1}"
-  local platform="${build_platform:-$(uname -s | tr '[:upper:]' '[:lower:]')}"
+  local platform="${build_platform:-${TARGET_PLATFORM:-$(uname -s | tr '[:upper:]' '[:lower:]')}}"
   
   case "${platform}" in
     linux-64|linux)
@@ -95,7 +95,7 @@ main() {
   ghc-pkg recache
   
   # Configure GHC for Windows ar compatibility
-  if [[ "${build_platform}" == win-* ]] || [[ "${platform}" == win-* ]] || [[ "${platform}" == mingw* ]]; then
+  if [[ [[ "${target_platform}" == win-* ]]; then
     export CABAL_CONFIG_FLAGS="--configure-option=--with-ar=${AR} --configure-option=--ar-options=qc"
   fi
 
