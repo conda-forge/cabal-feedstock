@@ -32,7 +32,7 @@ requirements:
         - m2-diffutils
         - m2-file
         - m2-grep
-        # - m2-unzip
+        - m2-unzip
         - m2-which
   host:
     - gmp
