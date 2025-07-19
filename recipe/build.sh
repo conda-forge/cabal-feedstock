@@ -85,7 +85,7 @@ install_cabal() {
     --installdir="${install_dir}" \
     --install-method=copy \
     --minimize-conflict-set \
-    cabal-install
+    cabal-install -v3
 }
 
 # Main build process
