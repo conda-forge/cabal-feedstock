@@ -45,6 +45,8 @@ requirements:
       then:
         - libiconv
         - libffi
+  run:
+    # Minimal runtime dependencies - cabal is mostly statically linked
 
 tests:
   - script: |

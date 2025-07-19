@@ -128,8 +128,8 @@ main() {
     # Configure cabal for static linking on Windows
     export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-static"
   elif [[ "${target_platform}" == osx-* ]]; then
-    # Configure for static linking on macOS to avoid overlinking
-    export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-optl-static"
+    # Configure for macOS to avoid overlinking (no full static linking on macOS)
+    export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-optl-Wl,-dead_strip"
   else
     # Linux configuration
     export CABAL_CONFIG_FLAGS=""
