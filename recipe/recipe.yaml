@@ -27,6 +27,7 @@ requirements:
         - tar
         - xz-tools
       else:
+        - binutils
         - m2-bash
         - m2-coreutils
         - m2-diffutils
