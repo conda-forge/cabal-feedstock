@@ -15,7 +15,7 @@ build:
 requirements:
   build:
     - ${{ compiler('c') }}
-    - ${{ compiler('cxx') }}
+    # - ${{ compiler('cxx') }}
     - ${{ stdlib('c') }}
     - perl
     - pkg-config
@@ -37,17 +37,18 @@ requirements:
         - m2-unzip
         - m2-which
   host:
-    - gmp
-    - libiconv
-    - libffi
-    - zlib
+    - if: linux
+      then:
+        - gmp
+        - zlib
+    - if: osx
+      then:
+        - libiconv
+        - libffi
 
 tests:
   - script: |
       cabal --version
-    # requirements:
-    #   run:
-    #     - libiconv
 
 about:
   homepage: https://github.com/haskell/cabal
@@ -59,4 +60,5 @@ about:
 
 extra:
   recipe-maintainers:
+    - MementoRC
     - eggzilla

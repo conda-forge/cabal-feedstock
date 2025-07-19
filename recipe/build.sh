@@ -122,11 +122,17 @@ main() {
     perl -i -pe 's/("ranlib command", ")([^"]*)"/\1x86_64-w64-mingw32-ranlib.exe"/g' "${settings_file}"
     
     # Set up proper library paths for GHC runtime
-    export LIBRARY_PATH="${BUILD_PREFIX}/ghc-bootstrap/lib/ghc-*/lib:${LIBRARY_PATH:-}"
-    export LD_LIBRARY_PATH="${BUILD_PREFIX}/ghc-bootstrap/lib/ghc-*/lib:${LD_LIBRARY_PATH:-}"
+    #export LIBRARY_PATH="${BUILD_PREFIX}/ghc-bootstrap/lib/ghc-*/lib:${LIBRARY_PATH:-}"
+    #export LD_LIBRARY_PATH="${BUILD_PREFIX}/ghc-bootstrap/lib/ghc-*/lib:${LD_LIBRARY_PATH:-}"
     
     # Configure cabal for static linking on Windows
-    export CABAL_CONFIG_FLAGS="-v3 --enable-static --disable-shared --ghc-options=-static"
+    export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-static"
+  elif [[ "${target_platform}" == osx-* ]]; then
+    # Configure for static linking on macOS to avoid overlinking
+    export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-optl-static"
+  else
+    # Linux configuration
+    export CABAL_CONFIG_FLAGS=""
   fi
 
   # Install bootstrapping cabal from conda-forge
