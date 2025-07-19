@@ -96,7 +96,10 @@ main() {
   
   # Configure GHC for Windows ar compatibility
   if [[ "${target_platform}" == win-* ]]; then
-    export CABAL_CONFIG_FLAGS="--configure-option=--with-ar=${AR} --configure-option=--ar-options=qc"
+    #export CABAL_CONFIG_FLAGS="--configure-option=--with-ar=${AR} --configure-option=--ar-options=qc"
+  perl -i -pe 's/("ar flags", ")([^"]*)"/\1qc"/g' "${BUILD_PREFIX}"/ghc-bootstrap/lib/settings
+  perl -i -pe 's/("ar supports -L", ")([^"]*)"/\1NO"/g' "${BUILD_PREFIX}"/ghc-bootstrap/lib/settings
+
   fi
 
   # Install bootstrapping cabal from conda-forge
