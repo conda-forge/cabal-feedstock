@@ -24,7 +24,7 @@ get_fallback_url() {
       echo "https://downloads.haskell.org/~cabal/cabal-install-${version}/cabal-install-${version}-x86_64-darwin.tar.xz"
       ;;
     win-64|mingw*|msys*|cygwin*)
-      echo "https://downloads.haskell.org/~cabal/cabal-install-${version}/cabal-install-${version}-x86_64-windows.tar.xz"
+      echo "https://downloads.haskell.org/~cabal/cabal-install-${version}/cabal-install-${version}-x86_64-windows.zip"
       ;;
   esac
 }
