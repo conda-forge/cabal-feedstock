@@ -19,7 +19,7 @@ requirements:
     - perl
     - pkg-config
     - curl
-    - ghc-bootstrap ==9.12.1
+    - ghc-bootstrap ==9.12.2
     - if: unix
       then:
         - file
