@@ -99,27 +99,27 @@ main() {
     export CC=${GCC}
     
     # Fix windres path
-    perl -i -pe 's/PREFIX/BUILD_PREFIX/g' "${BUILD_PREFIX}"/ghc-bootstrap/bin/windres.bat
+    # perl -i -pe 's/PREFIX/BUILD_PREFIX/g' "${BUILD_PREFIX}"/ghc-bootstrap/bin/windres.bat
     
     # Update GHC settings for Windows toolchain compatibility
     local settings_file="${BUILD_PREFIX}/ghc-bootstrap/lib/settings"
     
     # Fix critical linker settings
-    perl -i -pe 's/("Merge objects command", ")([^"]*)"/\1x86_64-w64-mingw32-ld.exe"/g' "${settings_file}"
-    perl -i -pe 's/("Merge objects flags", ")([^"]*)"/\1-r"/g' "${settings_file}"
-    perl -i -pe 's/("Merge objects supports response files", ")([^"]*)"/\1YES"/g' "${settings_file}"
+    # perl -i -pe 's/("Merge objects command", ")([^"]*)"/\1x86_64-w64-mingw32-ld.exe"/g' "${settings_file}"
+    # perl -i -pe 's/("Merge objects flags", ")([^"]*)"/\1-r"/g' "${settings_file}"
+    # perl -i -pe 's/("Merge objects supports response files", ")([^"]*)"/\1YES"/g' "${settings_file}"
     
     # Configure proper C compiler and linker
-    perl -i -pe 's/("C compiler command", ")([^"]*)"/\1x86_64-w64-mingw32-gcc.exe"/g' "${settings_file}"
-    perl -i -pe 's/("C compiler link flags", ")([^"]*)"/\1-fuse-ld=bfd -Wl,--enable-auto-import"/g' "${settings_file}"
+    # perl -i -pe 's/("C compiler command", ")([^"]*)"/\1x86_64-w64-mingw32-gcc.exe"/g' "${settings_file}"
+    # perl -i -pe 's/("C compiler link flags", ")([^"]*)"/\1-fuse-ld=bfd -Wl,--enable-auto-import"/g' "${settings_file}"
     
     # Use GNU ar instead of llvm-ar for better compatibility
-    perl -i -pe 's/("ar command", ")([^"]*)"/\1x86_64-w64-mingw32-ar.exe"/g' "${settings_file}"
-    perl -i -pe 's/("ar flags", ")([^"]*)"/\1qc"/g' "${settings_file}"
-    perl -i -pe 's/("ar supports -L", ")([^"]*)"/\1NO"/g' "${settings_file}"
+    # perl -i -pe 's/("ar command", ")([^"]*)"/\1x86_64-w64-mingw32-ar.exe"/g' "${settings_file}"
+    # perl -i -pe 's/("ar flags", ")([^"]*)"/\1qc"/g' "${settings_file}"
+    # perl -i -pe 's/("ar supports -L", ")([^"]*)"/\1NO"/g' "${settings_file}"
     
     # Configure ranlib
-    perl -i -pe 's/("ranlib command", ")([^"]*)"/\1x86_64-w64-mingw32-ranlib.exe"/g' "${settings_file}"
+    # Sperl -i -pe 's/("ranlib command", ")([^"]*)"/\1x86_64-w64-mingw32-ranlib.exe"/g' "${settings_file}"
     
     # Set up proper library paths for GHC runtime
     #export LIBRARY_PATH="${BUILD_PREFIX}/ghc-bootstrap/lib/ghc-*/lib:${LIBRARY_PATH:-}"
