@@ -121,7 +121,9 @@ main() {
   cat > cabal.release.constraints.project << EOF
 allow-newer:
     *:base,
-    *:template-haskell
+    *:template-haskell,
+    *:ghc-prim,
+    tasty:tagged
 EOF
 
   # Append release project if it exists
