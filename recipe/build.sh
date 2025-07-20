@@ -101,6 +101,9 @@ main() {
     # Configure cabal for static linking on Windows
     export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-static"
   elif [[ "${target_platform}" == osx-* ]]; then
+    settings_file="${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.12.1/lib/settings
+    perl -i -pe 's#("C compiler link flags", ")([^"]*)"#\1\2 -Wl,-rpath,@loader_path/../lib"#g' "${settings_file}"
+    perl -i -pe 's#("C compiler link flags", ")([^"]*)"#\1\2 -Wl,-rpath,\$topdir/../../../../lib"#g' "${settings_file}"
     # Configure for macOS to avoid overlinking (no full static linking on macOS)
     export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-optl-Wl,-dead_strip"
   else
