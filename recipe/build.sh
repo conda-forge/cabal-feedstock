@@ -39,7 +39,7 @@ main() {
   # Configure GHC for Windows compatibility
   if [[ "${target_platform}" == win-* ]]; then
     export CC=${GCC}
-    export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-static"
+    export CABAL_CONFIG_FLAGS="-v3 --enable-static --disable-shared --ghc-options=-static"
   elif [[ "${target_platform}" == osx-* ]]; then
     export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-optl-Wl,-dead_strip"
   else
