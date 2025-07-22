@@ -37,7 +37,7 @@ requirements:
     - perl
     - pkg-config
     - curl
-    - ghc-bootstrap
+    - ghc-bootstrap ==9.10.1
     - if: unix
       then:
         - file
