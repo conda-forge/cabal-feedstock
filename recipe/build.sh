@@ -41,10 +41,6 @@ main() {
     export CC=${GCC}
     export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-static"
   elif [[ "${target_platform}" == osx-* ]]; then
-    settings_file=$(find "${BUILD_PREFIX}"/ghc-bootstrap/lib -name settings)
-    cat "${settings_file}"
-    # perl -i -pe 's#("C compiler link flags", ")([^"]*)"#\1\2 -L\$topdir/../../../../lib"#g' "${settings_file}"
-    # perl -i -pe 's#("C compiler link flags", ")([^"]*)"#\1\2 -Wl,-rpath,@loader_path/../lib"#g' "${settings_file}"
     export CABAL_CONFIG_FLAGS="-v1 --enable-static --disable-shared --ghc-options=-optl-Wl,-dead_strip"
   else
     export CABAL_CONFIG_FLAGS=""
