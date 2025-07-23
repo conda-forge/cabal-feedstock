@@ -37,7 +37,7 @@ requirements:
     - perl
     - pkg-config
     - curl
-    - ghc-bootstrap ==9.12.2 pl5321h7f65811_1
+    - ghc-bootstrap ==9.12.2 pl5321h7f65811_2
     - if: unix
       then:
         - file

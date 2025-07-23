@@ -50,16 +50,8 @@ main() {
     export CABAL_CONFIG_FLAGS=""
   fi
 
-  # Install bootstrapping cabal from conda-forge
-  if ! conda create -n cabal_env -y -c conda-forge cabal; then
-    echo "Conda cabal install failed, fallback to binary dist cabal-install-${PKG_VERSION}"
-    export CABAL=$(find "${SRC_DIR}"/cabal-bootstrap -name "cabal*" -type f | head -1)
-    chmod +x "${CABAL}"
-  else
-    export CABAL="conda run -n cabal_env cabal"
-  fi
-
-  echo "Bootstrap cabal version: $(eval ${CABAL} --version)"
+  export CABAL=$(find "${SRC_DIR}"/cabal-bootstrap -name "cabal*" -type f | head -1)
+  chmod +x "${CABAL}"
   clean_cabal || true
 
   # Create project configuration
