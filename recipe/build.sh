@@ -41,10 +41,7 @@ main() {
     export CC=${GCC}
     export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-static"
   elif [[ "${target_platform}" == osx-* ]]; then
-    find /Applications/Xcode_15.2.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk -name "*resolv.*" || true
-    find ${BUILD_PREFIX} -name "*resolv.*" || true
-    find ${PREFIX} -name "*resolv.*" || true
-    export CABAL_CONFIG_FLAGS="-v3 --enable-static --disable-shared --ghc-options=-optl-Wl,-dead_strip"
+    export CABAL_CONFIG_FLAGS="-v1 --enable-static --disable-shared --ghc-options=-optl-Wl,-dead_strip"
   else
     export CABAL_CONFIG_FLAGS=""
   fi
