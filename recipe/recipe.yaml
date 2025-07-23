@@ -39,11 +39,11 @@ requirements:
     - curl
     
     - if: osx
-      then: ghc-bootstrap ==9.12.2 pl5321h7f65811_2
+      then: ghc-bootstrap ==9.12.2 pl5321h7f65811_4
     - if: linux
-      then: ghc-bootstrap ==9.12.2 pl5321hc1377c9_2
+      then: ghc-bootstrap ==9.12.2 pl5321hc1377c9_4
     - if: not unix
-      then: ghc-bootstrap ==9.12.2 pl5321hf003a06_2
+      then: ghc-bootstrap ==9.12.2 pl5321hf003a06_4
       
     - if: unix
       then:
