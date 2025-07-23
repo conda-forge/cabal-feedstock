@@ -70,14 +70,8 @@ EOF
 
   # Try building with bootstrap cabal
   if ! install_cabal "${PREFIX}/bin"; then
-    echo "Bootstrap build failed, fallback to binary dist cabal-install-${PKG_VERSION}"
-    
-    export CABAL=$(find "${SRC_DIR}"/cabal-bootstrap -name "cabal*" -type f | head -1)
-    chmod +x "${CABAL}"
-    
-    clean_cabal
-    echo "Building from source"
-    install_cabal "${PREFIX}/bin"
+    echo "Binary dist cabal-install-${PKG_VERSION} failed to build itself"
+    exit 1
   fi
 
   # Verify installation
