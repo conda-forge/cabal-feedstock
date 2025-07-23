@@ -37,8 +37,7 @@ requirements:
     - perl
     - pkg-config
     - curl
-    - ghc-bootstrap ==9.12.1
-    - libffi
+    - ghc-bootstrap ==9.12.2 pl5321h7f65811_1
     - if: unix
       then:
         - file
