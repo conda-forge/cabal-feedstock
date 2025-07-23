@@ -38,6 +38,7 @@ requirements:
     - pkg-config
     - curl
     - ghc-bootstrap ==9.12.1
+    - libffi
     - if: unix
       then:
         - file
