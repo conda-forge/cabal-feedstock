@@ -1,46 +1,79 @@
-#!/bin/bash
-export LD_LIBRARY_PATH="$PREFIX/lib:$LD_LIBRARY_PATH"
-export LIBRARY_PATH="$PREFIX/lib:$LIBRARY_PATH"
-export C_INCLUDE_PATH="$PREFIX/include:$C_INCLUDE_PATH"
-export LDFLAGS=" -lgmp $LDFLAGS"
-echo $LDFLAGS
-export LD="x86_64-conda_cos6-linux-gnu-ld"
-echo "Content PREFIX bin"
-ls -lrt $PREFIX/bin
-echo "Content PREFIX lib"
-ls -lrt $PREFIX/lib
-echo "Content PREFIX bin"
-ls -lrt $BUILD_PREFIX/bin
-ghc-pkg recache
-ghc-pkg describe rts
-ghc-pkg describe rts > rts.pkg
-perl -pi -e 's/$PREFIX\/lib\/ghc-8.2.2\/rts/$PREFIX\/lib\/ghc-8.2.2\/rts \$\{pkgroot\}\/../g' rts.pkg
-cat rts.pkg
-ghc-pkg update rts.pkg
-echo "Setting x86_64-conda_cos6-linux-gnu-gcc"
-echo "GCC version"
-x86_64-conda_cos6-linux-gnu-gcc --version
-echo "CC version"
-x86_64-conda_cos6-linux-gnu-cc --version
-echo "Collect2"
-x86_64-conda_cos6-linux-gnu-cc -print-prog-name=collect2
-echo "ld"
-x86_64-conda_cos6-linux-gnu-cc -print-prog-name=ld
-echo "LD version"
-x86_64-conda_cos6-linux-gnu-ld --version
-echo "LD help"
-x86_64-conda_cos6-linux-gnu-ld --help
-export EXTRA_CONFIGURE_OPTS=" --extra-include-dirs=$PREFIX/include --extra-lib-dirs=$PREFIX/lib ";
-sed -i -- 's/collect2 //g' cabal-install/bootstrap.sh
+#!/usr/bin/env bash
 
-ghc-pkg recache
-cd cabal-install
-echo "Extra configure opts"
-echo "$EXTRA_CONFIGURE_OPTS"
-sed -i -- 's/export LD=$LINK/export LINK=x86_64-conda_cos6-linux-gnu-cc/g' bootstrap.sh
+set -eux
 
-sed -i -- 's/${GHC} --make ${JOBS} ${PKG_DBS} Setup -o Setup/${GHC} -lgmp -threaded -pgmc x86_64-conda_cos6-linux-gnu-cc -pgml x86_64-conda_cos6-linux-gnu-cc --make ${JOBS} ${PKG_DBS} Setup -o Setup/g' bootstrap.sh
-cat bootstrap.sh
-export GHC=`which ghc`
-strings $GHC
-./bootstrap.sh --no-doc
+# Environment setup
+export PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig:${PKG_CONFIG_PATH:+:}${PKG_CONFIG_PATH:-}"
+export LD_LIBRARY_PATH="${PREFIX}/lib:${BUILD_PREFIX}/lib${LD_LIBRARY_PATH:+:}${LD_LIBRARY_PATH:-}"
+export LIBRARY_PATH="${PREFIX}/lib:${BUILD_PREFIX}/lib${LIBRARY_PATH:+:}${LIBRARY_PATH:-}"
+export PATH="${BUILD_PREFIX}/ghc-bootstrap/bin${PATH:+:}${PATH:-}"
+
+unset build_alias
+unset host_alias
+
+# Clean cabal environment
+clean_cabal() {
+  eval ${CABAL} clean
+  rm -rf dist-newstyle
+  rm -rf ~/.cabal/store ~/.cabal/packages
+  eval ${CABAL} update
+}
+
+# Install cabal with given parameters
+install_cabal() {
+  local install_dir="${1}"
+  eval ${CABAL} install \
+    --project-file=cabal.release.constraints.project \
+    --installdir="${install_dir}" \
+    --install-method=copy \
+    --minimize-conflict-set \
+    ${CABAL_CONFIG_FLAGS:-} \
+    cabal-install
+}
+
+# Main build process
+main() {
+  # Initialize package database
+  ghc-pkg recache
+  
+  # Configure GHC for Windows compatibility
+  if [[ "${target_platform}" == win-* ]]; then
+    export CC=${GCC}
+    export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-static"
+  elif [[ "${target_platform}" == osx-* ]]; then
+    export CABAL_CONFIG_FLAGS="-v1 --enable-static --disable-shared --ghc-options=-optl-Wl,-dead_strip"
+  else
+    export CABAL_CONFIG_FLAGS=""
+  fi
+
+  export CABAL=$(find "${SRC_DIR}"/cabal-bootstrap -name "cabal*" -type f | head -1)
+  chmod +x "${CABAL}"
+  clean_cabal || true
+
+  # Create project configuration
+  cat > cabal.release.constraints.project << EOF
+allow-newer:
+    *:base,
+    *:template-haskell,
+    *:ghc-prim,
+    tasty:tagged
+EOF
+
+  # Append release project if it exists
+  if [[ -f cabal.release.project ]]; then
+      cat cabal.release.project >> cabal.release.constraints.project
+  fi
+
+  # Try building with bootstrap cabal
+  if ! install_cabal "${PREFIX}/bin"; then
+    echo "Binary dist cabal-install-${PKG_VERSION} failed to build itself"
+    exit 1
+  fi
+
+  # Verify installation
+  echo "Verifying installation:"
+  "${PREFIX}/bin/cabal" --version
+}
+
+# Run main function
+main

@@ -1,0 +1,80 @@
+context:
+  version: "3.14.1.1"
+
+package:
+  name: cabal
+  version: ${{ version }}
+
+source:
+  - url: https://github.com/haskell/cabal/archive/refs/tags/cabal-install-v${{ version }}.tar.gz
+    sha256: a79d90a4eefa1c55d10db78e252d5ea7fdf057bdb6bb7ab54743aec77208b506
+  
+  # This should actually rarely be used
+  - if: linux
+    then:
+      url: https://downloads.haskell.org/~cabal/cabal-install-${{ version }}/cabal-install-${{ version }}-x86_64-linux-ubuntu20_04.tar.xz
+      sha256: 91d2b65907e95462396fa96892ebbd903861fc07b5cb74993c612e33d4c0cc65
+      target_directory: cabal-bootstrap
+  - if: osx
+    then:
+      url: https://downloads.haskell.org/~cabal/cabal-install-${{ version }}/cabal-install-${{ version }}-x86_64-darwin.tar.xz
+      sha256: 3690d8f7aa368141574f9eaf8e75bc26932ed7b422f5ade107d6972b3b72532f
+      target_directory: cabal-bootstrap
+  - if: not unix
+    then:
+      url: https://downloads.haskell.org/~cabal/cabal-install-${{ version }}/cabal-install-${{ version }}-x86_64-windows.zip
+      sha256: e313d60f849d4d7838406c154d60fdef8bfb7214848ac614ebafff19972c194e
+      target_directory: cabal-bootstrap
+    
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ stdlib('c') }}
+    - perl
+    - pkg-config
+    - curl
+    - ghc-bootstrap
+    - if: unix
+      then:
+        - file
+        - tar
+        - xz-tools
+      else:
+        - binutils
+        - m2-bash
+        - m2-coreutils
+        - m2-diffutils
+        - m2-file
+        - m2-gawk
+        - m2-grep
+        - m2-unzip
+        - m2-which
+  host:
+    - if: linux
+      then:
+        - gmp
+        - zlib
+    - if: osx
+      then:
+        - libiconv
+
+tests:
+  - script: |
+      cabal --version
+
+about:
+  homepage: https://github.com/haskell/cabal
+  license: BSD-3-Clause
+  license_file: LICENSE
+  summary: 'cabal-install is the command line interface to Cabal and hackage.'
+  documentation: https://www.haskell.org/cabal/index.html
+  repository: https://github.com/haskell/cabal
+
+extra:
+  recipe-maintainers:
+    - MementoRC
+    - eggzilla
