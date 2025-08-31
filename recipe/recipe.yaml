@@ -17,7 +17,7 @@ source:
   - if: osx
     then:
       url: https://downloads.haskell.org/~cabal/cabal-install-${{ version }}/cabal-install-${{ version }}-x86_64-darwin.tar.xz
-      sha256: 55f7d9e99b8e2d4e0e193b2f0275501e6d9c1ebd29cadbea6a0da48a8587e3e0
+      sha256: 3aed78619b2164dd61eb61afb024073ae2c50f6655fa60fcc1080980693e3220
       target_directory: cabal-bootstrap
   - if: not unix
     then:
