@@ -41,10 +41,10 @@ main() {
     export CC=${GCC}
     export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-static"
   elif [[ "${target_platform}" == osx-* ]]; then
-    export CABAL_CONFIG_FLAGS="-v1 --enable-static --disable-shared --ghc-options=-optl-Wl,-dead_strip"
+    export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-optl-Wl,-dead_strip"
   else
     export C_INCLUDE_PATH="${PREFIX}/include:${C_INCLUDE_PATH:-}"
-    export CABAL_CONFIG_FLAGS=""
+    export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-static"
   fi
 
   export CABAL=$(find "${SRC_DIR}"/cabal-bootstrap -name "cabal*" -type f | head -1)
@@ -58,13 +58,9 @@ main() {
 
   # Create project configuration
   cat >> cabal.release.constraints.project << EOF
+allow-newer:
+    *:base,
 EOF
-#allow-newer:
-#    *:base,
-#    *:template-haskell,
-#    *:ghc-prim,
-#    tasty:tagged
-#EOF
 
   # Try building with bootstrap cabal
   if ! install_cabal "${PREFIX}/bin"; then
