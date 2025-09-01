@@ -1,5 +1,5 @@
 context:
-  version: "3.14.2.0"
+  version: "3.8.1.0"
 
 package:
   name: cabal
@@ -7,22 +7,22 @@ package:
 
 source:
   - url: https://github.com/haskell/cabal/archive/refs/tags/cabal-install-v${{ version }}.tar.gz
-    sha256: c24784c3cfaea08f7a0cfcddba31672044dcab59f5c6bb58a82ddc7e4310badc
+    sha256: e547d8ef7d86c8f1633b23d28bed3a8457bf08db3a382e4b4faa1cc7e8de0393
 
   - if: linux
     then:
-      url: https://downloads.haskell.org/~cabal/cabal-install-${{ version }}/cabal-install-${{ version }}-x86_64-linux-ubuntu20_04.tar.xz
-      sha256: 974a0c29cae721a150d5aa079a65f2e1c0843d1352ffe6aedd7594b176c3e1e6
+      url: https://downloads.haskell.org/~cabal/cabal-install-${{ version }}/cabal-install-${{ version }}-x86_64-linux-deb10.tar.xz
+      sha256: c71a1a46fd42d235bb86be968660815c24950e5da2d1ff4640da025ab520424b
       target_directory: cabal-bootstrap
   - if: osx
     then:
       url: https://downloads.haskell.org/~cabal/cabal-install-${{ version }}/cabal-install-${{ version }}-x86_64-darwin.tar.xz
-      sha256: f9d0cac59deeeb1d35f72f4aa7e5cba3bfe91d838e9ce69b8bc9fc855247ce0f
+      sha256: f5ff69127b0e596b0d7895a2b0b383543aa92ae46d9b1b28f2868d2a97ed0de9
       target_directory: cabal-bootstrap
   - if: not unix
     then:
       url: https://downloads.haskell.org/~cabal/cabal-install-${{ version }}/cabal-install-${{ version }}-x86_64-windows.zip
-      sha256: 7b97779519f7c4e86d7a87ff2ec57777c17ca69389b968f363fbfbdbf4ae8536
+      sha256: b6dd6afe0e5a883f84dc52d836af0e90d9cd2b2978dd87200332085ecb4a0315
       target_directory: cabal-bootstrap
     
 
@@ -35,14 +35,9 @@ requirements:
     - ${{ stdlib('c') }}
     - perl
     - pkg-config
-    - curl
-    - ghc-bootstrap
-    - if: unix
+    - ghc-bootstrap ==9.6.7
+    - if: not unix
       then:
-        - file
-        - tar
-        - xz-tools
-      else:
         - binutils
         - m2-bash
         - m2-coreutils
