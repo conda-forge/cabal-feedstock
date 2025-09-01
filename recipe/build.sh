@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eux
+set -eu -o pipefail
 
 # Environment setup
 export PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig:${PKG_CONFIG_PATH:+:}${PKG_CONFIG_PATH:-}"
@@ -43,6 +43,7 @@ main() {
   elif [[ "${target_platform}" == osx-* ]]; then
     export CABAL_CONFIG_FLAGS="-v1 --enable-static --disable-shared --ghc-options=-optl-Wl,-dead_strip"
   else
+    export C_INCLUDE_PATH="${PREFIX}/include:${C_INCLUDE_PATH:-}"
     export CABAL_CONFIG_FLAGS=""
   fi
 
@@ -50,19 +51,20 @@ main() {
   chmod +x "${CABAL}"
   clean_cabal || true
 
-  # Create project configuration
-  cat > cabal.release.constraints.project << EOF
-allow-newer:
-    *:base,
-    *:template-haskell,
-    *:ghc-prim,
-    tasty:tagged
-EOF
-
   # Append release project if it exists
-  if [[ -f cabal.release.project ]]; then
-      cat cabal.release.project >> cabal.release.constraints.project
+  if [[ -f cabal.project.release ]]; then
+      cat cabal.project.release > cabal.release.constraints.project
   fi
+
+  # Create project configuration
+  cat >> cabal.release.constraints.project << EOF
+EOF
+#allow-newer:
+#    *:base,
+#    *:template-haskell,
+#    *:ghc-prim,
+#    tasty:tagged
+#EOF
 
   # Try building with bootstrap cabal
   if ! install_cabal "${PREFIX}/bin"; then
