@@ -17,12 +17,12 @@ source:
   - if: osx
     then:
       url: https://downloads.haskell.org/~cabal/cabal-install-${{ version }}/cabal-install-${{ version }}-x86_64-darwin.tar.xz
-      sha256: cd64f2a8f476d0f320945105303c982448ca1379ff54b8625b79fb982b551d90
+      sha256: f5ff69127b0e596b0d7895a2b0b383543aa92ae46d9b1b28f2868d2a97ed0de9
       target_directory: cabal-bootstrap
   - if: not unix
     then:
       url: https://downloads.haskell.org/~cabal/cabal-install-${{ version }}/cabal-install-${{ version }}-x86_64-windows.zip
-      sha256: b09e335b2ebeafa1db5e1e5614e3e10fb37da230a36865d76646ab27b2f3f46b
+      sha256: b6dd6afe0e5a883f84dc52d836af0e90d9cd2b2978dd87200332085ecb4a0315
       target_directory: cabal-bootstrap
     
 

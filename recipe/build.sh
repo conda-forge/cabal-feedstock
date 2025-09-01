@@ -44,7 +44,6 @@ main() {
     export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-optl-Wl,-dead_strip"
   else
     export C_INCLUDE_PATH="${PREFIX}/include:${C_INCLUDE_PATH:-}"
-    export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-static"
   fi
 
   export CABAL=$(find "${SRC_DIR}"/cabal-bootstrap -name "cabal*" -type f | head -1)
