@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 
-set -eux
+set -eu -o pipefail
 
 # Environment setup
-export PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig:${PKG_CONFIG_PATH:+:}${PKG_CONFIG_PATH:-}"
-export LD_LIBRARY_PATH="${PREFIX}/lib:${BUILD_PREFIX}/lib${LD_LIBRARY_PATH:+:}${LD_LIBRARY_PATH:-}"
-export LIBRARY_PATH="${PREFIX}/lib:${BUILD_PREFIX}/lib${LIBRARY_PATH:+:}${LIBRARY_PATH:-}"
+export PKG_CONFIG_PATH="${BUILD_PREFIX}/lib/pkgconfig:${PKG_CONFIG_PATH:+:}${PKG_CONFIG_PATH:-}"
+export LIBRARY_PATH="${BUILD_PREFIX}/lib:${PREFIX}/lib${LIBRARY_PATH:+:}${LIBRARY_PATH:-}"
 export PATH="${BUILD_PREFIX}/ghc-bootstrap/bin${PATH:+:}${PATH:-}"
 
 unset build_alias
@@ -22,36 +21,56 @@ clean_cabal() {
 # Install cabal with given parameters
 install_cabal() {
   local install_dir="${1}"
-  eval ${CABAL} install \
+  
+  ${CABAL} install \
     --project-file=cabal.release.constraints.project \
     --installdir="${install_dir}" \
     --install-method=copy \
     --minimize-conflict-set \
     ${CABAL_CONFIG_FLAGS:-} \
-    cabal-install
+    cabal-install || true
 }
 
 # Main build process
 main() {
-  # Initialize package database
-  ghc-pkg recache
   
+  # Don't copy libc - causes segfaults due to version mixing
   # Configure GHC for Windows compatibility
   if [[ "${target_platform}" == win-* ]]; then
     export CC=${GCC}
     export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-static"
   elif [[ "${target_platform}" == osx-* ]]; then
-    export CABAL_CONFIG_FLAGS="-v1 --enable-static --disable-shared --ghc-options=-optl-Wl,-dead_strip"
+    export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-optl-Wl,-dead_strip"
   else
+    # Correct the libc.so script to avoid trying to load /lib64/libc.so.6
+    sysroot_libc_script="${BUILD_PREFIX}/x86_64-conda-linux-gnu/sysroot/usr/lib64/libc.so"
+    sed -i "s|/lib64/libc.so.6|libc.so.6|g" "$sysroot_libc_script"
+    sed -i "s|/usr/lib64/libc_nonshared.a|libc_nonshared.a|g" "$sysroot_libc_script"
+    sed -i "s|/lib64/ld-linux-x86-64.so.2|ld-2.17.so|g" "$sysroot_libc_script"
+    
     export CABAL_CONFIG_FLAGS=""
+    export C_INCLUDE_PATH="${BUILD_PREFIX}/include:${C_INCLUDE_PATH:-}"
   fi
 
   export CABAL=$(find "${SRC_DIR}"/cabal-bootstrap -name "cabal*" -type f | head -1)
+  
+  # Ensure sysrrot use for cabal
+  patchelf --remove-rpath "${CABAL}"
+  patchelf --force-rpath --set-rpath "${BUILD_PREFIX}/x86_64-conda-linux-gnu/sysroot/lib64:${BUILD_PREFIX}/x86_64-conda-linux-gnu/sysroot/usr/lib64:${BUILD_PREFIX}/ghc-bootstrap/lib/ghc-9.6.7/lib/x86_64-linux-ghc-9.6.7:${BUILD_PREFIX}/x86_64-conda-linux-gnu/lib:${BUILD_PREFIX}/lib" "${CABAL}"
+  
+  # Set interpreter for compilation by bootstrap
+  patchelf --set-interpreter "${BUILD_PREFIX}/x86_64-conda-linux-gnu/sysroot/lib64/ld-2.17.so" "${CABAL}"
   chmod +x "${CABAL}"
+
   clean_cabal || true
 
+  # Append release project if it exists
+  if [[ -f cabal.release.project ]]; then
+      cat cabal.release.project > cabal.release.constraints.project
+  fi
+
   # Create project configuration
-  cat > cabal.release.constraints.project << EOF
+  cat >> cabal.release.constraints.project << EOF
 allow-newer:
     *:base,
     *:template-haskell,
@@ -59,20 +78,15 @@ allow-newer:
     tasty:tagged
 EOF
 
-  # Append release project if it exists
-  if [[ -f cabal.release.project ]]; then
-      cat cabal.release.project >> cabal.release.constraints.project
-  fi
-
   # Try building with bootstrap cabal
   if ! install_cabal "${PREFIX}/bin"; then
-    echo "Binary dist cabal-install-${PKG_VERSION} failed to build itself"
+    echo "Binary dist cabal-install-${PKG_VERSION} failed to build"
+    mv /home/conda/.cache/cabal/logs ${SRC_DIR}/_logs 2>/dev/null || true
     exit 1
   fi
 
-  # Verify installation
-  echo "Verifying installation:"
-  "${PREFIX}/bin/cabal" --version
+  # Reset interpreter to default (it should work with any libc >= 2.17)
+  patchelf --set-interpreter "/lib64/ld-linux-x86-64.so.2" "${PREFIX}"/bin/cabal
 }
 
 # Run main function

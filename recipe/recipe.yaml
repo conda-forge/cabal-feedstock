@@ -11,8 +11,8 @@ source:
 
   - if: linux
     then:
-      url: https://downloads.haskell.org/~cabal/cabal-install-${{ version }}/cabal-install-${{ version }}-x86_64-linux-ubuntu20_04.tar.xz
-      sha256: 974a0c29cae721a150d5aa079a65f2e1c0843d1352ffe6aedd7594b176c3e1e6
+      url: https://downloads.haskell.org/~cabal/cabal-install-${{ version }}/cabal-install-${{ version }}-x86_64-linux-centos7.tar.xz
+      sha256: af679f5ec47431580798c32a3174e5a4b2c64da25f10c6a10ef0c5a5a3a5eccc
       target_directory: cabal-bootstrap
   - if: osx
     then:
@@ -27,22 +27,20 @@ source:
     
 
 build:
-  number: 0
+  number: 1
 
 requirements:
   build:
     - ${{ compiler('c') }}
     - ${{ stdlib('c') }}
-    - perl
+    - ghc-bootstrap ==9.6.7
     - pkg-config
-    - curl
-    - ghc-bootstrap
-    - if: unix
+    
+    - if: linux
       then:
-        - file
-        - tar
-        - xz-tools
-      else:
+        - strace
+    - if: not unix
+      then:
         - binutils
         - m2-bash
         - m2-coreutils
@@ -52,10 +50,26 @@ requirements:
         - m2-grep
         - m2-unzip
         - m2-which
+      else:
+        - attr
+        - bash
+        - binutils
+        - coreutils
+        - file
+        - findutils
+        - grep
+        - libcap
+        - libgcc-ng
+        # - ncurses
+        - readline
+        - tar
+        - zlib
   host:
     - if: linux
       then:
         - gmp
+        # - libffi
+        # - ncurses
         - zlib
     - if: osx
       then:
