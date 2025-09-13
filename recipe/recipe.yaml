@@ -51,6 +51,7 @@ requirements:
         - findutils
         - grep
         - readline
+        - sed
         - tar
       else:
         - m2-bash
