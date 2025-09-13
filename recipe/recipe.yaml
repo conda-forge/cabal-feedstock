@@ -36,9 +36,6 @@ requirements:
     - ghc-bootstrap ==9.6.7
     - pkg-config
     
-    - if: linux
-      then:
-        - strace
     - if: not unix
       then:
         - binutils
@@ -59,8 +56,6 @@ requirements:
         - findutils
         - grep
         - libcap
-        - libgcc-ng
-        # - ncurses
         - readline
         - tar
         - zlib
@@ -68,8 +63,6 @@ requirements:
     - if: linux
       then:
         - gmp
-        # - libffi
-        # - ncurses
         - zlib
     - if: osx
       then:
