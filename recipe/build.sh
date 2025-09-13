@@ -86,7 +86,7 @@ main() {
   # Create project configuration
   cat >> cabal.release.constraints.project << EOF
 allow-newer:
-    *:base,
+    *:base
 constraints:
     lukko -ofd-locking
 EOF
