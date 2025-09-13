@@ -44,7 +44,7 @@ main() {
     export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-optl-Wl,-dead_strip"
     
     #Temporary ghc-bootstrap fix:
-    sed -i "s|-L/|-L\$topdir/|" "${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
+    sed -i "s|-L/../../../../ghc-bootstrap/lib/private|-L\$topdir/../../../../ghc-bootstrap/lib/private|" "${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
     
   elif [[ "${target_platform}" == "linux-64" ]]; then
     # Correct the libc.so script to avoid trying to load /lib64/libc.so.6
