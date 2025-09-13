@@ -36,10 +36,12 @@ requirements:
     - binutils
     - ghc-bootstrap ==9.6.7
     - pkg-config
+    - zlib
     
     - if: linux
       then:
         - attr
+        - libcap
       
     - if: unix
       then:
@@ -48,10 +50,8 @@ requirements:
         - file
         - findutils
         - grep
-        - libcap
         - readline
         - tar
-        - zlib
       else:
         - m2-bash
         - m2-coreutils
