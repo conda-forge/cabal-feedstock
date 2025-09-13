@@ -41,7 +41,7 @@ main() {
     export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-static"
     
   elif [[ "${target_platform}" == "osx-"* ]]; then
-    export CABAL_CONFIG_FLAGS="--verbose=1 --enable-static --disable-shared --ghc-options=-optl-Wl,-dead_strip"
+    export CABAL_CONFIG_FLAGS="--verbose=3 --ghc-options=-optl-Wl,-dead_strip"
     
   elif [[ "${target_platform}" == "linux-64" ]]; then
     # Correct the libc.so script to avoid trying to load /lib64/libc.so.6
