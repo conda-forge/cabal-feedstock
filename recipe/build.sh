@@ -43,6 +43,9 @@ main() {
   elif [[ "${target_platform}" == "osx-"* ]]; then
     export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-optl-Wl,-dead_strip"
     
+    #Temporary ghc-bootstrap fix:
+    sed -i "s|-L/|-L\$topdir/|" "${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
+    
   elif [[ "${target_platform}" == "linux-64" ]]; then
     # Correct the libc.so script to avoid trying to load /lib64/libc.so.6
     sysroot_libc_script="${BUILD_PREFIX}/x86_64-conda-linux-gnu/sysroot/usr/lib64/libc.so"
