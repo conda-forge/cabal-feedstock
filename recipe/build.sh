@@ -41,7 +41,7 @@ main() {
     export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-static"
     
   elif [[ "${target_platform}" == "osx-"* ]]; then
-    export CABAL_CONFIG_FLAGS="--verbose=3 --ghc-options=-optl-Wl,-dead_strip"
+    export CABAL_CONFIG_FLAGS="--ghc-options=-optl-Wl,-dead_strip"
     
   elif [[ "${target_platform}" == "linux-64" ]]; then
     # Correct the libc.so script to avoid trying to load /lib64/libc.so.6
@@ -87,9 +87,8 @@ main() {
   cat >> cabal.release.constraints.project << EOF
 allow-newer:
     *:base,
-    *:template-haskell,
-    *:ghc-prim,
-    tasty:tagged
+constraints:
+    lukko -ofd-locking
 EOF
 
   # Try building with bootstrap cabal

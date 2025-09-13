@@ -14,8 +14,6 @@ channel_sources:
 - conda-forge
 channel_targets:
 - conda-forge main
-libcap:
-- '2.75'
 libiconv:
 - '1'
 macos_machine:
