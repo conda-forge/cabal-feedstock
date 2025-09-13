@@ -33,24 +33,17 @@ requirements:
   build:
     - ${{ compiler('c') }}
     - ${{ stdlib('c') }}
+    - binutils
     - ghc-bootstrap ==9.6.7
     - pkg-config
     
-    - if: not unix
+    - if: linux
       then:
-        - binutils
-        - m2-bash
-        - m2-coreutils
-        - m2-diffutils
-        - m2-file
-        - m2-gawk
-        - m2-grep
-        - m2-unzip
-        - m2-which
-      else:
         - attr
+
+    - if: unix
+      then:
         - bash
-        - binutils
         - coreutils
         - file
         - findutils
@@ -59,6 +52,15 @@ requirements:
         - readline
         - tar
         - zlib
+      else:
+        - m2-bash
+        - m2-coreutils
+        - m2-diffutils
+        - m2-file
+        - m2-gawk
+        - m2-grep
+        - m2-unzip
+        - m2-which
   host:
     - if: linux
       then:
