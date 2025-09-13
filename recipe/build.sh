@@ -41,7 +41,7 @@ main() {
     export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-static"
     
   elif [[ "${target_platform}" == "osx-"* ]]; then
-    export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-optl-Wl,-dead_strip"
+    export CABAL_CONFIG_FLAGS="--verbose=3 --ghc-options=-optl-Wl,-dead_strip"
     
   elif [[ "${target_platform}" == "linux-64" ]]; then
     # Correct the libc.so script to avoid trying to load /lib64/libc.so.6
@@ -49,7 +49,7 @@ main() {
     sed -i "s|/lib64/libc.so.6|libc.so.6|g" "$sysroot_libc_script"
     sed -i "s|/usr/lib64/libc_nonshared.a|libc_nonshared.a|g" "$sysroot_libc_script"
     sed -i "s|/lib64/ld-linux-x86-64.so.2|ld-2.17.so|g" "$sysroot_libc_script"
-    
+
     # Ensure sysroot used for cabal
     patchelf --remove-rpath "${CABAL}"
     patchelf --force-rpath --set-rpath "${BUILD_PREFIX}/x86_64-conda-linux-gnu/sysroot/lib64:${BUILD_PREFIX}/x86_64-conda-linux-gnu/sysroot/usr/lib64:${BUILD_PREFIX}/ghc-bootstrap/lib/ghc-9.6.7/lib/x86_64-linux-ghc-9.6.7:${BUILD_PREFIX}/x86_64-conda-linux-gnu/lib:${BUILD_PREFIX}/lib" "${CABAL}"
@@ -79,7 +79,7 @@ main() {
     exit 1
   fi
 
-  # Remove static linking zlib
+  # Remove static linking zlib (no longer an issue post 3.14)
   sed -i 's|package zlib$||' cabal.release.constraints.project
   sed -i 's|  flags: -pkg-config +bundled-c-zlib||' cabal.release.constraints.project
   
