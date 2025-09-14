@@ -15,6 +15,8 @@ clean_cabal() {
   eval ${CABAL} clean
   rm -rf dist-newstyle
   rm -rf ~/.cabal/store ~/.cabal/packages
+  # Also clean the new v3.10.3.0 store location
+  rm -rf ~/.local/state/cabal/store
   eval ${CABAL} update
 }
 
