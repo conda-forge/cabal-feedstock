@@ -43,14 +43,9 @@ main() {
     export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-static"
     
   elif [[ "${target_platform}" == "osx-"* ]]; then
-    export CABAL_CONFIG_FLAGS="--ghc-options=-optl-Wl,-dead_strip"
-    # Temporary: ghc-bootstrap is being updated
-    sed -i "s#[^ ]*libiconv.2.tbd -L[^ ]*private##g" "${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
-    
-    find /Applications -name "*iconv*"
-    
-    #sed -i "s#[^ ]*libiconv.2.tbd#${SDKROOT}/usr/lib/libiconv.2.tbd#g" "${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
-    #sed -i "s#-L[^ ]*private#-L${SDKROOT}/usr/lib#g" "${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
+    export CABAL_CONFIG_FLAGS="--ghc-options=-optl-Wl,-dead_strip --ghc-options=-optl-liconv"
+    # Fix GHC settings to use conda-provided libiconv
+    sed -i "s#[^ ]*libiconv.2.tbd -L[^ ]*private#-L${PREFIX}/lib -liconv#g" "${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
 
     
   elif [[ "${target_platform}" == "linux-64" ]]; then
