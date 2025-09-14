@@ -43,6 +43,10 @@ requirements:
         - attr
         - libcap
 
+    - if: osxx
+      then:
+        - libiconv
+
     - if: unix
       then:
         - bash
