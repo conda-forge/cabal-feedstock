@@ -17,6 +17,7 @@ clean_cabal() {
   rm -rf ~/.cabal/store ~/.cabal/packages
   # Also clean the new v3.10.3.0 store location
   rm -rf ~/.local/state/cabal/store
+  ls /Users/runner/.local/state/cabal/ || true
   eval ${CABAL} update
 }
 
@@ -67,7 +68,7 @@ main() {
     exit 1
   fi
 
-  bash -x clean_cabal
+  clean_cabal
 
   # Append release project if it exists
   if [[ -f cabal.release.project ]]; then
