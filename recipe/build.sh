@@ -67,7 +67,7 @@ main() {
     exit 1
   fi
 
-  clean_cabal || true
+  bash -x clean_cabal
 
   # Append release project if it exists
   if [[ -f cabal.release.project ]]; then
@@ -102,6 +102,8 @@ EOF
 
   if [[ "${target_platform}" == "linux-64" ]]; then
     # Reset interpreter to default (it should work with any libc >= 2.17)
+    patchelf --remove-rpath "${CABAL}"
+    patchelf --force-rpath --set-rpath "${PREFIX}/x86_64-conda-linux-gnu/sysroot/lib64:${PREFIX}/x86_64-conda-linux-gnu/sysroot/usr/lib64:${PREFIX}/ghc-bootstrap/lib/ghc-9.6.7/lib/x86_64-linux-ghc-9.6.7:${PREFIX}/x86_64-conda-linux-gnu/lib:${PREFIX}/lib" "${CABAL}"
     patchelf --set-interpreter "/lib64/ld-linux-x86-64.so.2" "${PREFIX}"/bin/cabal
   fi
 }
