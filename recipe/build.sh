@@ -45,8 +45,8 @@ main() {
   elif [[ "${target_platform}" == "osx-"* ]]; then
     export CABAL_CONFIG_FLAGS="--ghc-options=-optl-Wl,-dead_strip --ghc-options=-optl-liconv"
     # Fix GHC settings to use conda-provided libiconv
-    sed -i "s#[^ ]*libiconv.2.tbd -L[^ ]*private#-L${PREFIX}/lib -liconv#g" "${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
-    sed -i -E "s#(ld flags\", \")#\1 -L${PREFIX}/lib -liconv#" "${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
+    sed -i "s#[^ ]*libiconv.2.tbd -L[^ ]*private#${SDKROOT}/usr/lib/libiconv.2.tbd#g" "${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
+    sed -i -E "s#(ld flags\", \")#\1 ${SDKROOT}/usr/lib/libiconv.2.tbd#" "${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
 
     
   elif [[ "${target_platform}" == "linux-64" ]]; then

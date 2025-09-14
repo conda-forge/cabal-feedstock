@@ -67,9 +67,9 @@ requirements:
       then:
         - gmp
         - zlib
-    - if: osx
-      then:
-        - libiconv
+    # - if: osx
+    #   then:
+    #     - libiconv
 
 tests:
   - script: |
