@@ -44,8 +44,6 @@ main() {
     
   elif [[ "${target_platform}" == "osx-"* ]]; then
     export CABAL_CONFIG_FLAGS="--ghc-options=-optl-Wl,-dead_strip"
-    # Set GHC environment to ensure consistent architecture for all compilations
-    export GHCRTS="-optc-march=x86-64 -optl-march=x86-64"
     
   elif [[ "${target_platform}" == "linux-64" ]]; then
     # Correct the libc.so script to avoid trying to load /lib64/libc.so.6
