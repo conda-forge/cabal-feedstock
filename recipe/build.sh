@@ -44,10 +44,14 @@ main() {
     
   elif [[ "${target_platform}" == "osx-"* ]]; then
     export CABAL_CONFIG_FLAGS="--ghc-options=-optl-Wl,-dead_strip --ghc-options=-optl-liconv"
-    export GHCFLAGS="-optc-march=x86-64 -optl-march=x86-64"
+    settings_file="${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
     # Fix GHC settings to use conda-provided libiconv
-    sed -i "s#[^ ]*libiconv.2.tbd -L[^ ]*private#${SDKROOT}/usr/lib/libiconv.2.tbd#g" "${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
-    sed -i -E "s#(ld flags\", \")#\1 ${SDKROOT}/usr/lib/libiconv.2.tbd#" "${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
+    sed -i -E "s#[^ ]*libiconv.2.tbd -L[^ ]*private#-L${PREFIX}/lib -liconv#g" "${settings_file}"
+    sed -i -E "s#(ld flags\", \")#\1 -L${PREFIX}/lib -liconv #" "${settings_file}"
+    
+    # SDK
+    # sed -i "s#[^ ]*libiconv.2.tbd -L[^ ]*private#${SDKROOT}/usr/lib/libiconv.2.tbd#g" "${settings_file}"
+    # sed -i -E "s#(ld flags\", \")#\1 ${SDKROOT}/usr/lib/libiconv.2.tbd#" "${settings_file}"
 
     
   elif [[ "${target_platform}" == "linux-64" ]]; then

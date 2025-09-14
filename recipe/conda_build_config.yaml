@@ -9,5 +9,5 @@ c_compiler:
   - clang                       # [unix]
   - gcc                         # [not unix]
 c_compiler_version:
-  - 18                          # [unix]
+  - 19                          # [unix]
   - 15                          # [not unix]
