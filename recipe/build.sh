@@ -17,7 +17,6 @@ clean_cabal() {
   rm -rf ~/.cabal/store ~/.cabal/packages
   # Also clean the new v3.10.3.0 store location
   rm -rf ~/.local/state/cabal/store
-  ls /Users/runner/.local/state/cabal/ || true
   eval ${CABAL} update
 }
 
@@ -30,7 +29,6 @@ install_cabal() {
     --installdir="${install_dir}" \
     --install-method=copy \
     --minimize-conflict-set \
-    --store-dir="${SRC_DIR}"/fresh-store \
     ${CABAL_CONFIG_FLAGS:-} \
     cabal-install
 }
@@ -45,7 +43,9 @@ main() {
     export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-static"
     
   elif [[ "${target_platform}" == "osx-"* ]]; then
-    export CABAL_CONFIG_FLAGS="--ghc-options=-optl-Wl,-dead_strip --ghc-options=-optc-march=x86-64 --ghc-options=-optl-march=x86-64"
+    export CABAL_CONFIG_FLAGS="--ghc-options=-optl-Wl,-dead_strip"
+    # Set GHC environment to ensure consistent architecture for all compilations
+    export GHCRTS="-optc-march=x86-64 -optl-march=x86-64"
     
   elif [[ "${target_platform}" == "linux-64" ]]; then
     # Correct the libc.so script to avoid trying to load /lib64/libc.so.6
@@ -94,6 +94,14 @@ allow-newer:
 constraints:
     lukko -ofd-locking
 EOF
+
+  # Add architecture flags for macOS to ensure consistent compilation
+  if [[ "${target_platform}" == "osx-"* ]]; then
+    cat >> cabal.release.constraints.project << EOF
+package *
+  ghc-options: -optc-march=x86-64 -optl-march=x86-64
+EOF
+  fi
 
   # Try building with bootstrap cabal
   if ! install_cabal "${PREFIX}/bin"; then
