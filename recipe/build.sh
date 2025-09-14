@@ -24,12 +24,13 @@ clean_cabal() {
 # Install cabal with given parameters
 install_cabal() {
   local install_dir="${1}"
-  
+
   ${CABAL} install \
     --project-file=cabal.release.constraints.project \
     --installdir="${install_dir}" \
     --install-method=copy \
     --minimize-conflict-set \
+    --store-dir="${SRC_DIR}"/fresh-store \
     ${CABAL_CONFIG_FLAGS:-} \
     cabal-install
 }
