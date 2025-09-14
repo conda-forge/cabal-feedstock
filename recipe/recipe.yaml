@@ -43,7 +43,7 @@ requirements:
         - attr
         - libcap
 
-    - if: osxx
+    - if: osx
       then:
         - libiconv
 
