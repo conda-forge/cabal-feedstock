@@ -43,11 +43,13 @@ main() {
     export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-static"
     
   elif [[ "${target_platform}" == "osx-"* ]]; then
-    export CABAL_CONFIG_FLAGS="-v2 --ghc-options=-optl-Wl,-dead_strip"
+    export CABAL_CONFIG_FLAGS="-v3 --ghc-options=-optl-Wl,-dead_strip"
     export CFLAGS="$CFLAGS -march=x86-64 -mmacosx-version-min=10.13"
     export LDFLAGS="$LDFLAGS -march=x86-64 -mmacosx-version-min=10.13"
     export CC_FOR_BUILD="$CC -march=x86-64 -mmacosx-version-min=10.13"
     export MACOSX_DEPLOYMENT_TARGET="10.13"
+    export AR="$AR"
+    export RANLIB="$RANLIB"
     
     settings_file="${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
     # Fix GHC settings to use conda-provided libiconv
@@ -64,6 +66,10 @@ main() {
 
     sed -i -E "s#(C\+\+ compiler flags\", \")#\1-march=x86-64 -mmacosx-version-min=10.13 #" "${settings_file}"
     sed -i -E "s#(C\+\+ compiler link flags\", \")#\1-march=x86-64 -mmacosx-version-min=10.13 #" "${settings_file}"
+
+    # Ensure proper archiver is used
+    sed -i -E "s#(ar command\", \")([^\"]+)#\1${AR}#" "${settings_file}"
+    sed -i -E "s#(ranlib command\", \")([^\"]+)#\1${RANLIB}#" "${settings_file}"
 
 
   elif [[ "${target_platform}" == "linux-64" ]]; then
