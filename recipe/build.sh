@@ -62,10 +62,10 @@ main() {
 
     # Force architecture and deployment target in GHC settings
     sed -i -E "s#(C compiler flags\", \")#\1-march=x86-64 -mmacosx-version-min=10.13 #" "${settings_file}"
-    sed -i -E "s#(C compiler link flags\", \")#\1-march=x86-64 -mmacosx-version-min=10.13 -Wl,-L${SDKROOT}/usr/lib/libiconv.2.tbd #" "${settings_file}"
+    sed -i -E "s#(C compiler link flags\", \")#\1-march=x86-64 -mmacosx-version-min=10.13 ${SDKROOT}/usr/lib/libiconv.2.tbd #" "${settings_file}"
 
     sed -i -E "s#(C\+\+ compiler flags\", \")#\1-march=x86-64 -mmacosx-version-min=10.13 #" "${settings_file}"
-    sed -i -E "s#(C\+\+ compiler link flags\", \")#\1-march=x86-64 -mmacosx-version-min=10.13 -Wl,-L${SDKROOT}/usr/lib/libiconv.2.tbd #" "${settings_file}"
+    sed -i -E "s#(C\+\+ compiler link flags\", \")#\1-march=x86-64 -mmacosx-version-min=10.13 ${SDKROOT}/usr/lib/libiconv.2.tbd #" "${settings_file}"
 
 
   elif [[ "${target_platform}" == "linux-64" ]]; then
