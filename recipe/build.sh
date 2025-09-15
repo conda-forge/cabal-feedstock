@@ -44,9 +44,10 @@ main() {
     
   elif [[ "${target_platform}" == "osx-"* ]]; then
     export CABAL_CONFIG_FLAGS="-v2 --ghc-options=-optl-Wl,-dead_strip"
-    export CFLAGS="$CFLAGS -march=x86-64"
-    export LDFLAGS="$LDFLAGS -march=x86-64"
-    export CC_FOR_BUILD="$CC -march=x86-64"
+    export CFLAGS="$CFLAGS -march=x86-64 -mmacosx-version-min=10.13"
+    export LDFLAGS="$LDFLAGS -march=x86-64 -mmacosx-version-min=10.13"
+    export CC_FOR_BUILD="$CC -march=x86-64 -mmacosx-version-min=10.13"
+    export MACOSX_DEPLOYMENT_TARGET="10.13"
     
     settings_file="${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
     # Fix GHC settings to use conda-provided libiconv
@@ -57,7 +58,11 @@ main() {
     sed -i "s#[^ ]*libiconv.2.tbd -L[^ ]*private#${SDKROOT}/usr/lib/libiconv.2.tbd#g" "${settings_file}"
     sed -i -E "s#(ld flags\", \")#\1 ${SDKROOT}/usr/lib/libiconv.2.tbd#" "${settings_file}"
 
-    
+    # Force architecture and deployment target in GHC settings
+    sed -i -E "s#(C compiler command\", \")([^\"]+)#\1\2 -march=x86-64 -mmacosx-version-min=10.13#" "${settings_file}"
+    sed -i -E "s#(C compiler link flags\", \")#\1-march=x86-64 -mmacosx-version-min=10.13 #" "${settings_file}"
+
+
   elif [[ "${target_platform}" == "linux-64" ]]; then
     # Correct the libc.so script to avoid trying to load /lib64/libc.so.6
     sysroot_libc_script="${BUILD_PREFIX}/x86_64-conda-linux-gnu/sysroot/usr/lib64/libc.so"
@@ -110,7 +115,7 @@ EOF
   if [[ "${target_platform}" == "osx-"* ]]; then
     cat >> cabal.release.constraints.project << EOF
 package *
-  ghc-options: -optc-march=x86-64 -optl-march=x86-64
+  ghc-options: -optc-march=x86-64 -optc-mmacosx-version-min=10.13 -optl-march=x86-64 -optl-mmacosx-version-min=10.13
 EOF
   fi
 
