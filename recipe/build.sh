@@ -49,6 +49,8 @@ main() {
     sed -i -E "s#[^ ]*libiconv.2.tbd -L[^ ]*private#-L${PREFIX}/lib -liconv#g" "${settings_file}"
     sed -i -E "s#(ld flags\", \")#\1 -L${PREFIX}/lib -liconv #" "${settings_file}"
     
+    cat "${settings_file}"
+    
     # SDK
     # sed -i "s#[^ ]*libiconv.2.tbd -L[^ ]*private#${SDKROOT}/usr/lib/libiconv.2.tbd#g" "${settings_file}"
     # sed -i -E "s#(ld flags\", \")#\1 ${SDKROOT}/usr/lib/libiconv.2.tbd#" "${settings_file}"
