@@ -43,7 +43,7 @@ main() {
     export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-static"
     
   elif [[ "${target_platform}" == "osx-"* ]]; then
-    export CABAL_CONFIG_FLAGS="-v2 --ghc-options=-optl-Wl,-dead_strip --disable-library-profiling --enable-shared --disable-static"
+    export CABAL_CONFIG_FLAGS="-v2 --ghc-options=-optl-Wl,-dead_strip --disable-library-profiling --enable-static --disable-shared"
     export CFLAGS="$CFLAGS -march=x86-64 -mmacosx-version-min=10.13"
     export LDFLAGS="$LDFLAGS -march=x86-64 -mmacosx-version-min=10.13"
     export CC_FOR_BUILD="$CC -march=x86-64 -mmacosx-version-min=10.13"
@@ -121,17 +121,13 @@ EOF
     cat >> cabal.release.constraints.project << EOF
 
 library-profiling: False
-shared: True
-executable-dynamic: True
+shared: False
+executable-static: True
 split-sections: False
 split-objs: False
 
 package *
-  ghc-options: -dynamic -fPIC -optc-march=x86-64 -optc-mmacosx-version-min=10.13 -optl-march=x86-64 -optl-mmacosx-version-min=10.13
-
-package cabal-install
-  executable-static: False
-  ghc-options: -dynamic -fPIC -optl-dynamic
+  ghc-options: -optc-march=x86-64 -optc-mmacosx-version-min=10.13 -optl-march=x86-64 -optl-mmacosx-version-min=10.13
 EOF
   fi
 
