@@ -59,8 +59,11 @@ main() {
     sed -i -E "s#(ld flags\", \")#\1 ${SDKROOT}/usr/lib/libiconv.2.tbd#" "${settings_file}"
 
     # Force architecture and deployment target in GHC settings
-    sed -i -E "s#(C compiler command\", \")([^\"]+)#\1\2 -march=x86-64 -mmacosx-version-min=10.13#" "${settings_file}"
+    sed -i -E "s#(C compiler flags\", \")#\1-march=x86-64 -mmacosx-version-min=10.13 #" "${settings_file}"
     sed -i -E "s#(C compiler link flags\", \")#\1-march=x86-64 -mmacosx-version-min=10.13 #" "${settings_file}"
+
+    sed -i -E "s#(C\+\+ compiler flags\", \")#\1-march=x86-64 -mmacosx-version-min=10.13 #" "${settings_file}"
+    sed -i -E "s#(C\+\+ compiler link flags\", \")#\1-march=x86-64 -mmacosx-version-min=10.13 #" "${settings_file}"
 
 
   elif [[ "${target_platform}" == "linux-64" ]]; then
