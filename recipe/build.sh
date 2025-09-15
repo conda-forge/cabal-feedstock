@@ -46,8 +46,8 @@ main() {
     export CABAL_CONFIG_FLAGS="--ghc-options=-optl-Wl,-dead_strip --ghc-options=-optl-liconv"
     settings_file="${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
     # Fix GHC settings to use conda-provided libiconv
-    sed -i -E "s#[^ ]*libiconv.2.tbd -L[^ ]*private# -liconv#g" "${settings_file}"
-    sed -i -E "s#(ld flags\", \")#\1-L\$topdir/../../../../lib -liconv #" "${settings_file}"
+    sed -i -E "s#[^ ]*libiconv.2.tbd -L[^ ]*private#-v -liconv#g" "${settings_file}"
+    sed -i -E "s#(ld flags\", \")#\1-v -L\$topdir/../../../../lib -liconv #" "${settings_file}"
     
     cat "${settings_file}"
     
