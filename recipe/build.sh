@@ -44,9 +44,9 @@ main() {
     
   elif [[ "${target_platform}" == "osx-"* ]]; then
     export CABAL_CONFIG_FLAGS="-v2 --ghc-options=-optl-Wl,-dead_strip --disable-library-profiling --enable-static --disable-shared"
-    export CFLAGS="$CFLAGS -march=x86-64 -mmacosx-version-min=10.13"
-    export LDFLAGS="$LDFLAGS -march=x86-64 -mmacosx-version-min=10.13"
-    export CC_FOR_BUILD="$CC -march=x86-64 -mmacosx-version-min=10.13"
+    export CFLAGS="$CFLAGS -target x86_64-apple-darwin13.4.0"
+    export LDFLAGS="$LDFLAGS -target x86_64-apple-darwin13.4.0"
+    export CC_FOR_BUILD="$CC -target x86_64-apple-darwin13.4.0"
     export MACOSX_DEPLOYMENT_TARGET="10.13"
     export AR="$AR"
     export RANLIB="$RANLIB"
@@ -61,11 +61,11 @@ main() {
     sed -i -E "s#(ld flags\", \")#\1 ${SDKROOT}/usr/lib/libiconv.2.tbd#" "${settings_file}"
 
     # Force architecture and deployment target in GHC settings
-    sed -i -E "s#(C compiler flags\", \")#\1-march=x86-64 -mmacosx-version-min=10.13 #" "${settings_file}"
-    sed -i -E "s#(C compiler link flags\", \")#\1-march=x86-64 -mmacosx-version-min=10.13 -Wl,${SDKROOT}/usr/lib/libiconv.2.tbd #" "${settings_file}"
+    sed -i -E "s#(C compiler flags\", \")#\1-target x86_64-apple-darwin13.4.0 #" "${settings_file}"
+    sed -i -E "s#(C compiler link flags\", \")#\1-target x86_64-apple-darwin13.4.0 -Wl,${SDKROOT}/usr/lib/libiconv.2.tbd #" "${settings_file}"
 
-    sed -i -E "s#(C\+\+ compiler flags\", \")#\1-march=x86-64 -mmacosx-version-min=10.13 #" "${settings_file}"
-    sed -i -E "s#(C\+\+ compiler link flags\", \")#\1-march=x86-64 -mmacosx-version-min=10.13 -Wl,${SDKROOT}/usr/lib/libiconv.2.tbd #" "${settings_file}"
+    sed -i -E "s#(C\+\+ compiler flags\", \")#\1-target x86_64-apple-darwin13.4.0 #" "${settings_file}"
+    sed -i -E "s#(C\+\+ compiler link flags\", \")#\1-target x86_64-apple-darwin13.4.0 -Wl,${SDKROOT}/usr/lib/libiconv.2.tbd #" "${settings_file}"
 
 
   elif [[ "${target_platform}" == "linux-64" ]]; then
@@ -127,7 +127,7 @@ split-sections: False
 split-objs: False
 
 package *
-  ghc-options: -optc-march=x86-64 -optc-mmacosx-version-min=10.13 -optl-march=x86-64 -optl-mmacosx-version-min=10.13
+  ghc-options: -optc-target -optcx86_64-apple-darwin13.4.0 -optl-target -optlx86_64-apple-darwin13.4.0
 EOF
   fi
 
