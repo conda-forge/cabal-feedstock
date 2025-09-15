@@ -119,11 +119,19 @@ EOF
   # Add architecture flags for macOS to ensure consistent compilation
   if [[ "${target_platform}" == "osx-"* ]]; then
     cat >> cabal.release.constraints.project << EOF
-package *
-  ghc-options: -optc-march=x86-64 -optc-mmacosx-version-min=10.13 -optl-march=x86-64 -optl-mmacosx-version-min=10.13
+
 library-profiling: False
 shared: True
 executable-dynamic: True
+split-sections: False
+split-objs: False
+
+package *
+  ghc-options: -optc-march=x86-64 -optc-mmacosx-version-min=10.13 -optl-march=x86-64 -optl-mmacosx-version-min=10.13
+
+package cabal-install
+  executable-static: False
+  ghc-options: -dynamic -optl-dynamic
 EOF
   fi
 
