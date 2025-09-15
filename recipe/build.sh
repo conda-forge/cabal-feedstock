@@ -44,6 +44,8 @@ main() {
     
   elif [[ "${target_platform}" == "osx-"* ]]; then
     export CABAL_CONFIG_FLAGS="-v2 --ghc-options=-optl-Wl,-dead_strip"
+    export CFLAGS="$CFLAGS -march=x86-64"
+    
     settings_file="${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
     # Fix GHC settings to use conda-provided libiconv
     # sed -i -E "s#[^ ]*libiconv.2.tbd -L[^ ]*private#-v -liconv#g" "${settings_file}"
