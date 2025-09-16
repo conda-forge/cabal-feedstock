@@ -132,6 +132,9 @@ package *
   static: True
 EOF
   fi
+  
+  ${CABAL} build -v3 happy || cat /Users/runner/.cache/cabal/logs/ghc-9.6.7/hppy-2.1.7-*.log
+  exit 1
 
   # Try building with bootstrap cabal
   if ! install_cabal "${PREFIX}/bin"; then
