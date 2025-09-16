@@ -116,10 +116,17 @@ main() {
   cat >> cabal.release.constraints.project << EOF
 allow-newer:
     *:base
+EOF
+
+  # Add architecture flags for macOS to ensure consistent compilation
+  if [[ "${target_platform}" == "linux-"* ]]; then
+    # lukko requires OFD introduced in GLIBC 2.20
+    cat >> cabal.release.constraints.project << EOF
 constraints:
     lukko -ofd-locking
 EOF
-
+  fi
+  
   # Add architecture flags for macOS to ensure consistent compilation
   if [[ "${target_platform}" == "osx-"* ]]; then
     cat >> cabal.release.constraints.project << EOF
@@ -141,9 +148,16 @@ EOF
     ${CABAL} build -v3 happy || cat /Users/runner/.cache/cabal/logs/ghc-9.6.7/hppy-2.1.7-*.log
     
     find /Users/runner/.local/state/cabal/store/ghc-9.6.7/ -name "libHShppy*.a" | while read -r library; do
+      echo "DBG: ${library}"
       file "${library}"
       ar -tv "${library}"
-      lipo -info  "${library}"
+      lipo -info "${library}"
+      
+      mkdir tmp && cd tmp
+      ar -x "${library}"
+      file *.o
+      otool -h *.o | head 20
+      cd .. && rm -r tmp
     done
     exit 1
   fi
