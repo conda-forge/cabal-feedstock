@@ -44,6 +44,7 @@ main() {
     
   elif [[ "${target_platform}" == "osx-"* ]]; then
     unset host_alias
+    unset build_alias
     unset HOST
     
     export CABAL_CONFIG_FLAGS="--ghc-options=-optl-Wl,-dead_strip --disable-library-profiling --enable-static --disable-shared"
@@ -138,6 +139,12 @@ EOF
   
   if [[ "${target_platform}" == "osx-"* ]]; then
     ${CABAL} build -v3 happy || cat /Users/runner/.cache/cabal/logs/ghc-9.6.7/hppy-2.1.7-*.log
+    
+    find /Users/runner/.local/state/cabal/store/ghc-9.6.7/ -name "libHShppy*.a" | while read -r library; do
+      file "${library}"
+      ar -tv "${library}"
+      lipo -info  "${library}"
+    done
     exit 1
   fi
 
