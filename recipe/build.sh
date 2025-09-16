@@ -122,12 +122,15 @@ EOF
 
 library-profiling: False
 shared: False
+static: True
 executable-static: True
 split-sections: False
 split-objs: False
 
 package *
   ghc-options: -optc-target -optcx86_64-apple-darwin13.4.0 -optl-target -optlx86_64-apple-darwin13.4.0
+  shared: False
+  static: True
 EOF
   fi
 
