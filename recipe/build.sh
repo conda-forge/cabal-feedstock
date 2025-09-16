@@ -169,7 +169,8 @@ EOF
       echo "."; echo ".";  echo "."
       echo "DBG: ${library}"
       file "${library}"
-      ar -tv "${library}"
+      hexdump -C "$lib" | head -5
+      ar -tv "${library}" | head -3
       lipo -info "${library}"
       
       mkdir tmp && cd tmp
