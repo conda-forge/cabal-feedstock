@@ -46,7 +46,7 @@ main() {
     unset host_alias
     unset HOST
     
-    export CABAL_CONFIG_FLAGS="-v2 --ghc-options=-optl-Wl,-dead_strip --disable-library-profiling --enable-static --disable-shared"
+    export CABAL_CONFIG_FLAGS="--ghc-options=-optl-Wl,-dead_strip --disable-library-profiling --enable-static --disable-shared"
     export CFLAGS="$CFLAGS "
     export LDFLAGS="$LDFLAGS "
     export CC_FOR_BUILD="$CC "
