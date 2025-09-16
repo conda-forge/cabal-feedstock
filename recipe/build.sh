@@ -128,7 +128,7 @@ split-sections: False
 split-objs: False
 
 package *
-  ghc-options: -optc-target -optcx86_64-apple-darwin13.4.0 -optl-target -optlx86_64-apple-darwin13.4.0
+  ghc-options: -optc-target=x86_64-apple-darwin13.4.0 -optl-target=x86_64-apple-darwin13.4.0
   shared: False
   static: True
 EOF
