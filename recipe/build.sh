@@ -148,6 +148,7 @@ EOF
     ${CABAL} build -v3 happy || cat /Users/runner/.cache/cabal/logs/ghc-9.6.7/hppy-2.1.7-*.log
     
     find /Users/runner/.local/state/cabal/store/ghc-9.6.7/ -name "libHShppy*.a" | while read -r library; do
+      echo "."; echo ".";  echo "."
       echo "DBG: ${library}"
       file "${library}"
       ar -tv "${library}"
@@ -156,8 +157,9 @@ EOF
       mkdir tmp && cd tmp
       ar -x "${library}"
       file *.o
-      otool -h *.o | head 20
+      otool -h *.o | head -20
       cd .. && rm -r tmp
+      echo "."; echo ".";  echo "."
     done
     exit 1
   fi
