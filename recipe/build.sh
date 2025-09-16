@@ -155,6 +155,7 @@ EOF
     ${CABAL} clean happy 2>/dev/null || true
     rm -rf ~/.local/state/cabal/store/ghc-9.6.7/*hppy* 2>/dev/null || true
     
+    ls /Applications/
     export DEVELOPER_DIR="/Applications/Xcode_15.2.app/Contents/Developer"
     ${CABAL} build -v3 \
     --ghc-options="-optl-Wl,-dead_strip" \
