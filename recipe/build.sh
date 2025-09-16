@@ -71,6 +71,13 @@ main() {
     sed -i -E "s#(C\+\+ compiler flags\", \")#\1 #" "${settings_file}"
     sed -i -E "s#(C\+\+ compiler link flags\", \")#\1 -Wl,${SDKROOT}/usr/lib/libiconv.2.tbd #" "${settings_file}"
 
+    cat "${settings_file}"
+    
+    sed -i -E "s#(\"ar command\", \").*(\")#\1${AR}\2#" "${settings_file}"
+    sed -i -E "s#(\"ranlib command\", \").*(\")#\1${RANLIB}\2#" "${settings_file}"
+    
+    cat "${settings_file}"
+    
 
   elif [[ "${target_platform}" == "linux-64" ]]; then
     # Correct the libc.so script to avoid trying to load /lib64/libc.so.6
