@@ -43,6 +43,9 @@ main() {
     export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-static"
     
   elif [[ "${target_platform}" == "osx-"* ]]; then
+    unset host_alias
+    unset HOST
+    
     export CABAL_CONFIG_FLAGS="-v2 --ghc-options=-optl-Wl,-dead_strip --disable-library-profiling --enable-static --disable-shared"
     export CFLAGS="$CFLAGS "
     export LDFLAGS="$LDFLAGS "
@@ -133,8 +136,10 @@ package *
 EOF
   fi
   
-  ${CABAL} build -v3 happy || cat /Users/runner/.cache/cabal/logs/ghc-9.6.7/hppy-2.1.7-*.log
-  exit 1
+  if [[ "${target_platform}" == "osx-"* ]]; then
+    ${CABAL} build -v3 happy || cat /Users/runner/.cache/cabal/logs/ghc-9.6.7/hppy-2.1.7-*.log
+    exit 1
+  fi
 
   # Try building with bootstrap cabal
   if ! install_cabal "${PREFIX}/bin"; then
