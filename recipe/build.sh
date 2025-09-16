@@ -145,7 +145,15 @@ EOF
   fi
   
   if [[ "${target_platform}" == "osx-"* ]]; then
-    ${CABAL} build -v3 happy || cat /Users/runner/.cache/cabal/logs/ghc-9.6.7/hppy-2.1.7-*.log
+    ${CABAL} clean happy 2>/dev/null || true
+    rm -rf ~/.local/state/cabal/store/ghc-9.6.7/*hppy* 2>/dev/null || true
+    
+    ${CABAL} build -v3 \
+    --ghc-options="-optl-Wl,-dead_strip" \
+    --disable-library-profiling \
+    --enable-static \
+    --disable-shared \
+    happy || cat /Users/runner/.cache/cabal/logs/ghc-9.6.7/hppy-2.1.7-*.log
     
     find /Users/runner/.local/state/cabal/store/ghc-9.6.7/ -name "libHShppy*.a" | while read -r library; do
       echo "."; echo ".";  echo "."
