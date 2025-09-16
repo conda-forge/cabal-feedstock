@@ -135,6 +135,11 @@ EOF
 
   # Try building with bootstrap cabal
   if ! install_cabal "${PREFIX}/bin"; then
+  
+    ${CABAL} build \
+    ${CABAL_CONFIG_FLAGS:-} \
+    cabal-install
+    
     echo "Binary dist cabal-install-${PKG_VERSION} failed to build"
     mv /home/conda/.cache/cabal/logs ${SRC_DIR}/_logs 2>/dev/null || true
     exit 1
