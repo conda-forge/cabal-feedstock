@@ -63,7 +63,7 @@ main() {
     # SDK
     sed -i "s#[^ ]*libiconv.2.tbd -L[^ ]*private#${SDKROOT}/usr/lib/libiconv.2.tbd#g" "${settings_file}"
     sed -i -E "s#(ld flags\", \")#\1 ${SDKROOT}/usr/lib/libiconv.2.tbd#" "${settings_file}"
-    sed -i -E "s#(ar flags\", \")qcls\"#\1rc#" "${settings_file}"
+    sed -i -E "s#(ar flags\", \")qcls\"#\1rc\"#" "${settings_file}"
 
     sed -i -E "s#(C compiler flags\", \")#\1 #" "${settings_file}"
     sed -i -E "s#(C compiler link flags\", \")#\1 -Wl,${SDKROOT}/usr/lib/libiconv.2.tbd #" "${settings_file}"
