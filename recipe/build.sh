@@ -75,9 +75,6 @@ main() {
     
     sed -i -E "s#(\"ar command\", \").*(\")#\1${AR}\2#" "${settings_file}"
     sed -i -E "s#(\"ranlib command\", \").*(\")#\1${RANLIB}\2#" "${settings_file}"
-    
-    cat "${settings_file}"
-    
 
   elif [[ "${target_platform}" == "linux-64" ]]; then
     # Correct the libc.so script to avoid trying to load /lib64/libc.so.6
@@ -150,45 +147,40 @@ package *
   static: True
 EOF
   fi
-  
-  if [[ "${target_platform}" == "osx-"* ]]; then
-    ${CABAL} clean happy 2>/dev/null || true
-    rm -rf ~/.local/state/cabal/store/ghc-9.6.7/*hppy* 2>/dev/null || true
-    
-    ls /Applications/
-    ${CABAL} build -v3 \
-    --ghc-options="-optl-Wl,-dead_strip -optl-Wl,-t -optl-Wl,-why_load" \
-    --disable-library-profiling \
-    --enable-static \
-    --disable-shared \
-    --jobs=1 \
-    happy || cat /Users/runner/.cache/cabal/logs/ghc-9.6.7/hppy-2.1.7-*.log
-    
-    find "${BUILD_PREFIX}"/
-    find /Users/runner/.local/state/cabal/store/ghc-9.6.7/ -name "libHShppy*.a" | while read -r library; do
-      echo "."; echo ".";  echo "."
-      echo "DBG: ${library}"
-      file "${library}"
-      hexdump -C "$lib" | head -5
-      ar -tv "${library}" | head -3
-      lipo -info "${library}"
-      
-      mkdir tmp && cd tmp
-      ar -x "${library}"
-      file *.o
-      otool -h *.o | head -20
-      cd .. && rm -r tmp
-      echo "."; echo ".";  echo "."
-    done
-    exit 1
-  fi
 
   # Try building with bootstrap cabal
   if ! install_cabal "${PREFIX}/bin"; then
   
-    ${CABAL} build \
-    ${CABAL_CONFIG_FLAGS:-} \
-    cabal-install
+    if [[ "${target_platform}" == "osx-"* ]]; then
+      ${CABAL} clean happy 2>/dev/null || true
+      rm -rf ~/.local/state/cabal/store/ghc-9.6.7/*hppy* 2>/dev/null || true
+ 
+      ls /Applications/
+      ${CABAL} build -v3 \
+      --ghc-options="-optl-Wl,-dead_strip -optl-Wl,-t -optl-Wl,-why_load" \
+      --disable-library-profiling \
+      --enable-static \
+      --disable-shared \
+      --jobs=1 \
+      happy || cat /Users/runner/.cache/cabal/logs/ghc-9.6.7/hppy-2.1.7-*.log
+ 
+      find "${BUILD_PREFIX}"/
+      find /Users/runner/.local/state/cabal/store/ghc-9.6.7/ -name "libHShppy*.a" | while read -r library; do
+        echo "."; echo ".";  echo "."
+        echo "DBG: ${library}"
+        file "${library}"
+        hexdump -C "$lib" | head -5
+        ar -tv "${library}" | head -3
+        lipo -info "${library}"
+ 
+        mkdir tmp && cd tmp
+        ar -x "${library}"
+        file *.o
+        otool -h *.o | head -20
+        cd .. && rm -r tmp
+        echo "."; echo ".";  echo "."
+      done
+    fi
     
     echo "Binary dist cabal-install-${PKG_VERSION} failed to build"
     mv /home/conda/.cache/cabal/logs ${SRC_DIR}/_logs 2>/dev/null || true
