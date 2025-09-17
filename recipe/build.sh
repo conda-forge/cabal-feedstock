@@ -52,8 +52,8 @@ main() {
     
     settings_file="${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
     # Fix GHC settings to use conda-provided libiconv
-    sed -i -E "s#[^ ]*libiconv.2.tbd -L[^ ]*private#-v -liconv#g" "${settings_file}"
-    sed -i -E "s#(ld flags\", \")#\1-v -L\$topdir/../../../../lib -L${SDKROOT}/usr/lib -liconv #" "${settings_file}"
+    sed -i -E "s#[^ ]*libiconv.2.tbd -L[^ ]*private##g" "${settings_file}"
+    sed -i -E "s#(ld flags\", \")#\1-v -L\$topdir/../../../../lib #" "${settings_file}"
     
     # SDK
     # sed -i "s#[^ ]*libiconv.2.tbd -L[^ ]*private#${SDKROOT}/usr/lib/libiconv.2.tbd#g" "${settings_file}"
@@ -143,10 +143,10 @@ EOF
   if ! install_cabal "${PREFIX}/bin"; then
   
     if [[ "${target_platform}" == "osx-"* ]]; then
-      ${CABAL} clean happy 2>/dev/null || true
-      rm -rf ~/.local/state/cabal/store/ghc-9.6.7/*hppy* 2>/dev/null || true
- 
-      ls /Applications/
+      find "${SDKROOT}" -name "*iconv*"
+      find "${BUILD_PREFIX}" -name "*iconv*"
+      find "${PREFIX}" -name "*iconv*"
+      
       ${CABAL} build \
       --ghc-options="-optl-Wl,-dead_strip -optl-Wl,-t -optl-Wl,-why_load" \
       --disable-library-profiling \
