@@ -162,7 +162,7 @@ EOF
       --enable-static \
       --disable-shared \
       --jobs=1 \
-      happy || cat /Users/runner/.cache/cabal/logs/ghc-9.6.7/hppy-2.1.7-*.log
+      happy
  
       find "${BUILD_PREFIX}"/
       find /Users/runner/.local/state/cabal/store/ghc-9.6.7/ -name "libHShppy*.a" | while read -r library; do
