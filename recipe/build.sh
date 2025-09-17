@@ -71,7 +71,6 @@ main() {
     sed -i -E "s#(C\+\+ compiler flags\", \")#\1 #" "${settings_file}"
     sed -i -E "s#(C\+\+ compiler link flags\", \")#\1 -Wl,${SDKROOT}/usr/lib/libiconv.2.tbd #" "${settings_file}"
 
-    sed -i -E "s#(\"otool command\", \")(.*\")#\1x86_64-conda-linux-gnu-\2#" "${settings_file}"
     sed -i -E "s#(\"LLVM llc command\", \")(.*\")#\1x86_64-conda-linux-gnu-\2#" "${settings_file}"
     sed -i -E "s#(\"LLVM opt command\", \")(.*\")#\1x86_64-conda-linux-gnu-\2#" "${settings_file}"
     sed -i -E "s#(\"LLVM clang command\", \")(.*\")#\1x86_64-conda-linux-gnu-\2#" "${settings_file}"
