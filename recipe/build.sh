@@ -164,12 +164,11 @@ EOF
       --jobs=1 \
       happy || true
  
-      find "${BUILD_PREFIX}"/
       find /Users/runner/.local/state/cabal/store/ghc-9.6.7/ -name "libHShppy*.a" | while read -r library; do
         echo "."; echo ".";  echo "."
         echo "DBG: ${library}"
         file "${library}"
-        hexdump -C "$lib" | head -5
+        hexdump -C "${library}" | head -5
         ar -tv "${library}" | head -3
         lipo -info "${library}"
  
