@@ -38,6 +38,10 @@ requirements:
     - pkg-config
     - zlib
 
+    - if: osx
+      then:
+        - libiconv
+
     - if: linux
       then:
         - attr
@@ -67,9 +71,6 @@ requirements:
       then:
         - gmp
         - zlib
-    # - if: osx
-    #   then:
-    #     - libiconv
 
 tests:
   - script: |

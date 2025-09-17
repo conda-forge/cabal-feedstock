@@ -47,7 +47,15 @@ main() {
     unset build_alias
     unset HOST
     
-    export CABAL_CONFIG_FLAGS="--ghc-options=-optl-Wl,-dead_strip --disable-library-profiling --enable-shared --disable-static"
+    CABAL_CONFIG_FLAGS="--ghc-options=-optl-Wl,-dead_strip"
+    CABAL_CONFIG_FLAGS="${CABAL_CONFIG_FLAGS} --disable-library-profiling"
+    CABAL_CONFIG_FLAGS="${CABAL_CONFIG_FLAGS} --enable-shared"
+    CABAL_CONFIG_FLAGS="${CABAL_CONFIG_FLAGS} --disable-static"
+    CABAL_CONFIG_FLAGS="${CABAL_CONFIG_FLAGS} --disable-static"
+    CABAL_CONFIG_FLAGS="${CABAL_CONFIG_FLAGS} --ghc-options=-optl-L${BUILD_PREFIX}/lib"
+    CABAL_CONFIG_FLAGS="${CABAL_CONFIG_FLAGS} --ghc-options=-optl-liconv"
+    
+    export CABAL_CONFIG_FLAGS
     export MACOSX_DEPLOYMENT_TARGET="10.13"
     
     settings_file="${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
@@ -58,7 +66,8 @@ main() {
     # SDK
     # sed -i "s#[^ ]*libiconv.2.tbd -L[^ ]*private#${SDKROOT}/usr/lib/libiconv.2.tbd#g" "${settings_file}"
     # sed -i -E "s#(ld flags\", \")#\1 ${SDKROOT}/usr/lib/libiconv.2.tbd#" "${settings_file}"
-
+    sed -i -E "s#(C compiler link flags\", \")(.*\")#\1 -fuse-ld=${LD} \2#" "${settings_file}" 
+    sed -i -E "s#(C\+\+ compiler link flags\", \")(.*\")#\1 -fuse-ld=${LD} \2#" "${settings_file}" 
     sed -i -E "s#(ar flags\", \")qcls\"#\1rc\"#" "${settings_file}"
 
     sed -i -E "s#(\"LLVM llc command\", \")(.*\")#\1x86_64-conda-linux-gnu-\2#" "${settings_file}"
