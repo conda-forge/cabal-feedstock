@@ -47,13 +47,8 @@ main() {
     unset build_alias
     unset HOST
     
-    export CABAL_CONFIG_FLAGS="--ghc-options=-optl-Wl,-dead_strip --disable-library-profiling --enable-static --disable-shared"
-    export CFLAGS="$CFLAGS "
-    export LDFLAGS="$LDFLAGS "
-    export CC_FOR_BUILD="$CC "
+    export CABAL_CONFIG_FLAGS="--ghc-options=-optl-Wl,-dead_strip --disable-library-profiling --enable-shared --disable-static"
     export MACOSX_DEPLOYMENT_TARGET="10.13"
-    export AR="$AR"
-    export RANLIB="$RANLIB"
     
     settings_file="${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
     # Fix GHC settings to use conda-provided libiconv
@@ -137,15 +132,15 @@ EOF
     cat >> cabal.release.constraints.project << EOF
 
 library-profiling: False
-shared: False
-static: True
+shared: True
+static: False
 executable-static: True
 split-sections: False
 split-objs: False
 
 package *
-  shared: False
-  static: True
+  shared: True
+  static: False
 EOF
   fi
 
@@ -157,11 +152,11 @@ EOF
       rm -rf ~/.local/state/cabal/store/ghc-9.6.7/*hppy* 2>/dev/null || true
  
       ls /Applications/
-      ${CABAL} build -v3 \
+      ${CABAL} build \
       --ghc-options="-optl-Wl,-dead_strip -optl-Wl,-t -optl-Wl,-why_load" \
       --disable-library-profiling \
-      --enable-static \
-      --disable-shared \
+      --enable-shared \
+      --disable-static \
       --jobs=1 \
       happy-lib || true
  
@@ -170,8 +165,8 @@ EOF
         echo "DBG: ${library}"
         file "${library}"
         hexdump -C "${library}" | head -5
-        ar -tv "${library}" | head -3
         lipo -info "${library}"
+        ar -tv "${library}" | head -3
  
         mkdir tmp && cd tmp
         ar -x "${library}"
