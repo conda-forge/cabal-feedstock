@@ -61,13 +61,13 @@ main() {
     settings_file="${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
     # Fix GHC settings to use conda-provided libiconv
     sed -i -E "s#[^ ]*libiconv.2.tbd -L[^ ]*private##g" "${settings_file}"
-    sed -i -E "s#(ld flags\", \")#\1-v -L\$topdir/../../../../lib #" "${settings_file}"
+    sed -i -E "s#(ld flags\", \")#\1-v -L\$topdir/../../../../lib -L${BUILD_PREFIX}/lib -L${PREFIX}/lib #" "${settings_file}"
     
     # SDK
     # sed -i "s#[^ ]*libiconv.2.tbd -L[^ ]*private#${SDKROOT}/usr/lib/libiconv.2.tbd#g" "${settings_file}"
     # sed -i -E "s#(ld flags\", \")#\1 ${SDKROOT}/usr/lib/libiconv.2.tbd#" "${settings_file}"
-    sed -i -E "s#(C compiler link flags\", \")(.*\")#\1 -B${BUILD_PREFIX}/bin \2#" "${settings_file}" 
-    sed -i -E "s#(C\+\+ compiler link flags\", \")(.*\")#\1 -B${BUILD_PREFIX}/bin \2#" "${settings_file}" 
+    sed -i -E "s#(C compiler link flags\", \")(.*\")#\1 -B${BUILD_PREFIX}/bin -L${BUILD_PREFIX}/lib -L${PREFIX}/lib \2#" "${settings_file}" 
+    sed -i -E "s#(C\+\+ compiler link flags\", \")(.*\")#\1 -B${BUILD_PREFIX}/bin -L${BUILD_PREFIX}/lib -L${PREFIX}/lib \2#" "${settings_file}" 
     sed -i -E "s#(ar flags\", \")qcls\"#\1rc\"#" "${settings_file}"
 
     sed -i -E "s#(\"LLVM llc command\", \")(.*\")#\1x86_64-conda-linux-gnu-\2#" "${settings_file}"
