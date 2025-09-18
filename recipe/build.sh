@@ -53,7 +53,7 @@ main() {
     CABAL_CONFIG_FLAGS="${CABAL_CONFIG_FLAGS} --disable-static"
     CABAL_CONFIG_FLAGS="${CABAL_CONFIG_FLAGS} --ghc-options=-optl-L${BUILD_PREFIX}/lib"
     CABAL_CONFIG_FLAGS="${CABAL_CONFIG_FLAGS} --ghc-options=-optl-L${PREFIX}/lib"
-    CABAL_CONFIG_FLAGS="${CABAL_CONFIG_FLAGS} --ghc-options=-optl-liconv"
+    CABAL_CONFIG_FLAGS="${CABAL_CONFIG_FLAGS} --ghc-options=-optl${BUILD_PREFIX}/lib/libiconv.dylib"
     
     export CABAL_CONFIG_FLAGS
     export MACOSX_DEPLOYMENT_TARGET="10.13"
