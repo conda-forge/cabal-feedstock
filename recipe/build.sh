@@ -51,8 +51,8 @@ main() {
     CABAL_CONFIG_FLAGS="${CABAL_CONFIG_FLAGS} --disable-library-profiling"
     CABAL_CONFIG_FLAGS="${CABAL_CONFIG_FLAGS} --enable-shared"
     CABAL_CONFIG_FLAGS="${CABAL_CONFIG_FLAGS} --disable-static"
-    CABAL_CONFIG_FLAGS="${CABAL_CONFIG_FLAGS} --disable-static"
     CABAL_CONFIG_FLAGS="${CABAL_CONFIG_FLAGS} --ghc-options=-optl-L${BUILD_PREFIX}/lib"
+    CABAL_CONFIG_FLAGS="${CABAL_CONFIG_FLAGS} --ghc-options=-optl-L${PREFIX}/lib"
     CABAL_CONFIG_FLAGS="${CABAL_CONFIG_FLAGS} --ghc-options=-optl-liconv"
     
     export CABAL_CONFIG_FLAGS
