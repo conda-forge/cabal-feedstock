@@ -65,7 +65,7 @@ main() {
     settings_file="${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
     # Fix GHC settings to use conda-provided libiconv
     sed -i -E "s#[^ ]*libiconv.2.tbd -L[^ ]*private##g" "${settings_file}"
-    sed -i -E "s#(ld flags\", \")#\1-v -L\$topdir/../../../../lib -L${BUILD_PREFIX}/lib -L${PREFIX}/lib #" "${settings_file}"
+    sed -i -E "s#(ld flags\", \")#\1-v -L${SDKROOT}/usr/lib -L\$topdir/../../../../lib -L${BUILD_PREFIX}/lib -L${PREFIX}/lib #" "${settings_file}"
     
     # SDK
     # sed -i "s#[^ ]*libiconv.2.tbd -L[^ ]*private#${SDKROOT}/usr/lib/libiconv.2.tbd#g" "${settings_file}"
