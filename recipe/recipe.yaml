@@ -24,7 +24,6 @@ source:
       url: https://downloads.haskell.org/~cabal/cabal-install-${{ version }}/cabal-install-${{ version }}-x86_64-windows.zip
       sha256: b651ca732998eba5c0e54f4329c147664a7fb3fe3e74eac890c31647ce1e179a
       target_directory: cabal-bootstrap
-    
 
 build:
   number: 1
@@ -37,10 +36,6 @@ requirements:
     - ghc-bootstrap ==9.6.7
     - pkg-config
     - zlib
-
-    - if: osx
-      then:
-        - libiconv
 
     - if: linux
       then:
