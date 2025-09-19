@@ -56,12 +56,9 @@ main() {
     settings_file="${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
     sed -i -E "s#-(L|rpath,)/#-\1\$topdir/#g" "${settings_file}"
 
-    # SDK
-    # sed -i "s#[^ ]*libiconv.2.tbd -L[^ ]*private#${SDKROOT}/usr/lib/libiconv.2.tbd#g" "${settings_file}"
-    # sed -i -E "s#(ld flags\", \")#\1 ${SDKROOT}/usr/lib/libiconv.2.tbd#" "${settings_file}"
+    sed -i -E "s#(ld flags\", \")#\1 -v#" "${settings_file}"
     sed -i -E "s#(C compiler link flags\", \")(.*\")#\1 -v -B${BUILD_PREFIX}/bin -L${BUILD_PREFIX}/lib -L${PREFIX}/lib \2#" "${settings_file}"
-    # sed -i -E "s#(C\+\+ compiler link flags\", \")(.*\")#\1 -B${BUILD_PREFIX}/bin -L${BUILD_PREFIX}/lib -L${PREFIX}/lib \2#" "${settings_file}"
-    sed -i -E "s#(ar flags\", \")qcls\"#\1rc\"#" "${settings_file}"
+    sed -i -E "s#(ar flags\", \")qcls\"#\1vrc\"#" "${settings_file}"
 
     sed -i -E "s#(\"LLVM llc command\", \")(.*\")#\1x86_64-apple-darwin13.4.0-\2#" "${settings_file}"
     sed -i -E "s#(\"LLVM opt command\", \")(.*\")#\1x86_64-apple-darwin13.4.0-\2#" "${settings_file}"
@@ -150,7 +147,7 @@ EOF
       find ~/.local/state/cabal/store -name "*hppy*" -type d || echo "No existing happy-lib found"
 
       ${CABAL} build \
-      --ghc-options="-dynamic -optl-Wl,-dead_strip" \
+      --ghc-options="-v -dynamic -optl-Wl,-dead_strip" \
       --disable-library-profiling \
       --enable-shared \
       --disable-static \
@@ -160,8 +157,8 @@ EOF
       echo "=== Checking what was built after happy-lib ==="
       find ~/.local/state/cabal/store -name "*hppy*" -type d
 
-      ${CABAL} build -v3 \
-      --ghc-options="-dynamic -v -optl-Wl,-dead_strip" \
+      ${CABAL} build \
+      --ghc-options="-v -dynamic -v -optl-Wl,-dead_strip" \
       --disable-library-profiling \
       --enable-shared \
       --disable-static \
