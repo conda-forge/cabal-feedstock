@@ -166,8 +166,8 @@ EOF
         echo "DBG: ${library}"
         file "${library}"
         hexdump -C "${library}" | head -5
-        ar -tv "${library}" | head -3
- 
+        nm -D "${library}" | grep zdfIxName
+
         mkdir tmp && cd tmp
         ar -x "${library}"
         file *.o
