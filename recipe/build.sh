@@ -47,9 +47,9 @@ main() {
     CABAL_CONFIG_FLAGS="${CABAL_CONFIG_FLAGS} --disable-library-profiling"
     CABAL_CONFIG_FLAGS="${CABAL_CONFIG_FLAGS} --enable-shared"
     CABAL_CONFIG_FLAGS="${CABAL_CONFIG_FLAGS} --disable-static"
-
     export CABAL_CONFIG_FLAGS
-    export MACOSX_DEPLOYMENT_TARGET="10.13"
+
+    # export MACOSX_DEPLOYMENT_TARGET="10.13"
     # export LDFLAGS="-L${BUILD_PREFIX}/lib -L${PREFIX}/lib ${LDFLAGS:-}"
     # export LIBRARY_PATH="${BUILD_PREFIX}/lib:${PREFIX}/lib:${LIBRARY_PATH:-}"
     
@@ -61,11 +61,11 @@ main() {
     # sed -i -E "s#(ld flags\", \")#\1 ${SDKROOT}/usr/lib/libiconv.2.tbd#" "${settings_file}"
     # sed -i -E "s#(C compiler link flags\", \")(.*\")#\1 -B${BUILD_PREFIX}/bin -L${BUILD_PREFIX}/lib -L${PREFIX}/lib \2#" "${settings_file}"
     # sed -i -E "s#(C\+\+ compiler link flags\", \")(.*\")#\1 -B${BUILD_PREFIX}/bin -L${BUILD_PREFIX}/lib -L${PREFIX}/lib \2#" "${settings_file}"
-    # sed -i -E "s#(ar flags\", \")qcls\"#\1rc\"#" "${settings_file}"
+    sed -i -E "s#(ar flags\", \")qcls\"#\1rc\"#" "${settings_file}"
 
     # sed -i -E "s#(\"LLVM llc command\", \")(.*\")#\1x86_64-conda-linux-gnu-\2#" "${settings_file}"
     # sed -i -E "s#(\"LLVM opt command\", \")(.*\")#\1x86_64-conda-linux-gnu-\2#" "${settings_file}"
-    # sed -i -E "s#(\"LLVM clang command\", \")(.*\")#\1x86_64-conda-linux-gnu-\2#" "${settings_file}"
+    sed -i -E "s#(\"LLVM clang command\", \")(.*\")#\1x86_64-conda-linux-gnu-\2#" "${settings_file}"
 
     cat "${settings_file}"
     
@@ -155,8 +155,16 @@ EOF
       --enable-shared \
       --disable-static \
       --jobs=1 \
-      happy-lib || true
+      happy-lib
  
+      ${CABAL} build \
+      --ghc-options="-optl-Wl,-dead_strip -optl-Wl,-t -optl-Wl,-why_load" \
+      --disable-library-profiling \
+      --enable-shared \
+      --disable-static \
+      --jobs=1 \
+      happy
+
       find /Users/runner/.local/state/cabal/store/ghc-9.6.7/ -name "libHShppy*.a" | while read -r library; do
         echo "."; echo ".";  echo "."
         echo "DBG: ${library}"
