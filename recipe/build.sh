@@ -63,9 +63,9 @@ main() {
     # sed -i -E "s#(C\+\+ compiler link flags\", \")(.*\")#\1 -B${BUILD_PREFIX}/bin -L${BUILD_PREFIX}/lib -L${PREFIX}/lib \2#" "${settings_file}"
     sed -i -E "s#(ar flags\", \")qcls\"#\1rc\"#" "${settings_file}"
 
-    sed -i -E "s#(\"LLVM llc command\", \")(.*\")#\1x86_64-conda-linux-gnu-\2#" "${settings_file}"
-    sed -i -E "s#(\"LLVM opt command\", \")(.*\")#\1x86_64-conda-linux-gnu-\2#" "${settings_file}"
-    sed -i -E "s#(\"LLVM clang command\", \")(.*\")#\1x86_64-conda-linux-gnu-\2#" "${settings_file}"
+    sed -i -E "s#(\"LLVM llc command\", \")(.*\")#\1x86_64-apple-darwin13.4.0-\2#" "${settings_file}"
+    sed -i -E "s#(\"LLVM opt command\", \")(.*\")#\1x86_64-apple-darwin13.4.0-\2#" "${settings_file}"
+    sed -i -E "s#(\"LLVM clang command\", \")(.*\")#\1x86_64-apple-darwin13.4.0-\2#" "${settings_file}"
 
     cat "${settings_file}"
     
