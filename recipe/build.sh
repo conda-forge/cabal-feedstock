@@ -168,8 +168,11 @@ EOF
       find /Users/runner/.local/state/cabal/store/ghc-9.6.7/ -name "libHShppy*.a" | while read -r library; do
         echo "."; echo ".";  echo "."
         echo "DBG: ${library}"
+        ls -l ${PREFIX}/lib && (cd ${PREFIX}/lib && pwd) || true
+        /Users/runner/miniforge3/bin/ld -v || true
+        ${BUILD_PREFIX}/bin/ld -v || true
         file "${library}"
-        hexdump -C "${library}" | head -5
+        hexdump -C "${library}" | head -5 || true
         # Check what symbols are actually in the library
         echo "=== Symbols in ${library} ==="
         nm "${library}" | grep -i "zdfIxName\|HappyziGrammar" || echo "No matching symbols found"
