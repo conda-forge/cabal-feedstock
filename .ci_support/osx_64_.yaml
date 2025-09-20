@@ -5,7 +5,7 @@ MACOSX_SDK_VERSION:
 c_compiler:
 - clang
 c_compiler_version:
-- '18'
+- '19'
 c_stdlib:
 - macosx_deployment_target
 c_stdlib_version:
@@ -14,10 +14,8 @@ channel_sources:
 - conda-forge
 channel_targets:
 - conda-forge main
-libcap:
-- '2.75'
-libiconv:
-- '1'
+libffi:
+- '3.4'
 macos_machine:
 - x86_64-apple-darwin13.4.0
 readline:

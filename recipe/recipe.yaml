@@ -34,15 +34,15 @@ requirements:
     - ${{ compiler('c') }}
     - ${{ stdlib('c') }}
     - binutils
-    - ghc-bootstrap ==9.6.7
+    - ghc-bootstrap ==9.6.7 h68ab1c8_5
     - pkg-config
     - zlib
-    
+
     - if: linux
       then:
         - attr
         - libcap
-      
+
     - if: unix
       then:
         - bash
@@ -63,13 +63,12 @@ requirements:
         - m2-unzip
         - m2-which
   host:
+    - if: osx
+      then: libffi
     - if: linux
       then:
         - gmp
         - zlib
-    - if: osx
-      then:
-        - libiconv
 
 tests:
   - script: |

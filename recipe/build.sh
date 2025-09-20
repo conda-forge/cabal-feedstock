@@ -15,13 +15,15 @@ clean_cabal() {
   eval ${CABAL} clean
   rm -rf dist-newstyle
   rm -rf ~/.cabal/store ~/.cabal/packages
+  # Also clean the new v3.10.3.0 store location
+  rm -rf ~/.local/state/cabal/store
   eval ${CABAL} update
 }
 
 # Install cabal with given parameters
 install_cabal() {
   local install_dir="${1}"
-  
+
   ${CABAL} install \
     --project-file=cabal.release.constraints.project \
     --installdir="${install_dir}" \
@@ -41,8 +43,8 @@ main() {
     export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-static"
     
   elif [[ "${target_platform}" == "osx-"* ]]; then
-    export CABAL_CONFIG_FLAGS="--verbose=3 --ghc-options=-optl-Wl,-dead_strip"
-    
+    export CABAL_CONFIG_FLAGS="--ghc-options=-optl-Wl,-dead_strip"
+
   elif [[ "${target_platform}" == "linux-64" ]]; then
     # Correct the libc.so script to avoid trying to load /lib64/libc.so.6
     sysroot_libc_script="${BUILD_PREFIX}/x86_64-conda-linux-gnu/sysroot/usr/lib64/libc.so"
@@ -65,7 +67,7 @@ main() {
     exit 1
   fi
 
-  clean_cabal || true
+  clean_cabal
 
   # Append release project if it exists
   if [[ -f cabal.release.project ]]; then
@@ -101,6 +103,8 @@ EOF
 
   if [[ "${target_platform}" == "linux-64" ]]; then
     # Reset interpreter to default (it should work with any libc >= 2.17)
+    patchelf --remove-rpath "${CABAL}"
+    patchelf --force-rpath --set-rpath "${PREFIX}/x86_64-conda-linux-gnu/sysroot/lib64:${PREFIX}/x86_64-conda-linux-gnu/sysroot/usr/lib64:${PREFIX}/ghc-bootstrap/lib/ghc-9.6.7/lib/x86_64-linux-ghc-9.6.7:${PREFIX}/x86_64-conda-linux-gnu/lib:${PREFIX}/lib" "${CABAL}"
     patchelf --set-interpreter "/lib64/ld-linux-x86-64.so.2" "${PREFIX}"/bin/cabal
   fi
 }
