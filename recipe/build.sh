@@ -102,62 +102,6 @@ EOF
   
   # Try building with bootstrap cabal
   if ! install_cabal "${PREFIX}/bin"; then
-  
-    if [[ "${target_platform}" == "osx-"* ]]; then
-      # Show what libraries are available before building
-      echo "=== Checking existing happy-lib installations ==="
-      find ~/.local/state/cabal/store -name "*hppy*" -type d || echo "No existing happy-lib found"
-
-      ${CABAL} build \
-      --ghc-options="-v -dynamic -optl-Wl,-dead_strip" \
-      --disable-library-profiling \
-      --enable-shared \
-      --disable-static \
-      --jobs=1 \
-      happy-lib
-
-      echo "=== Checking what was built after happy-lib ==="
-      find ~/.local/state/cabal/store -name "*hppy*" -type d
-
-      rm -f /Users/runner/miniforge3/bin/ld || true
-      ln -s ${BUILD_PREFIX}/bin/x86_64-apple-darwin13.4.0-ld ${BUILD_PREFIX}/bin/ld
-
-      ${CABAL} build \
-      --ghc-options="-v -dynamic -v -optl-Wl,-dead_strip" \
-      --disable-library-profiling \
-      --enable-shared \
-      --disable-static \
-      --jobs=1 \
-      happy || true
-
-      find /Users/runner/.local/state/cabal/store/ghc-9.6.7/ -name "libHShppy*.a" | while read -r library; do
-        echo "."; echo ".";  echo "."
-        echo "DBG: ${library}"
-        /Users/runner/miniforge3/bin/ld -v || true
-        ${BUILD_PREFIX}/bin/ld -v || true
-        file "${library}"
-        hexdump -C "${library}" | head -5 || true
-        # Check what symbols are actually in the library
-        echo "=== Symbols in ${library} ==="
-        nm "${library}" | grep -i "zdfIxName\|HappyziGrammar" || echo "No matching symbols found"
-
-        # Check if dynamic libraries exist instead
-        dylib_path="${library%.a}.dylib"
-        if [ -f "$dylib_path" ]; then
-          echo "=== Found dynamic library: $dylib_path ==="
-          file "$dylib_path"
-          nm -D "$dylib_path" | grep -i "zdfIxName\|HappyziGrammar" || echo "No matching symbols in dylib"
-        fi
-
-        mkdir tmp && cd tmp
-        ar -x "${library}"
-        file *.o
-        otool -h *.o | head -20
-        cd .. && rm -r tmp
-        echo "."; echo ".";  echo "."
-      done
-    fi
-    
     echo "Binary dist cabal-install-${PKG_VERSION} failed to build"
     mv /home/conda/.cache/cabal/logs ${SRC_DIR}/_logs 2>/dev/null || true
     exit 1
