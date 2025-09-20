@@ -88,12 +88,18 @@ main() {
   # Create project configuration
   cat >> cabal.release.constraints.project << EOF
 allow-newer:
-    *:base,
-    *:template-haskell,
-    *:ghc-prim,
-    tasty:tagged
+    *:base
 EOF
 
+  # Add architecture flags for macOS to ensure consistent compilation
+  if [[ "${target_platform}" == "linux-"* ]]; then
+    # lukko requires OFD introduced in GLIBC 2.20
+    cat >> cabal.release.constraints.project << EOF
+constraints:
+    lukko -ofd-locking
+EOF
+  fi
+  
   # Try building with bootstrap cabal
   if ! install_cabal "${PREFIX}/bin"; then
     echo "Binary dist cabal-install-${PKG_VERSION} failed to build"
