@@ -157,6 +157,7 @@ EOF
       echo "=== Checking what was built after happy-lib ==="
       find ~/.local/state/cabal/store -name "*hppy*" -type d
 
+      rm -f /Users/runner/miniforge3/bin/ld || true
       ln -s ${BUILD_PREFIX}/bin/x86_64-apple-darwin13.4.0-ld ${BUILD_PREFIX}/bin/ld
 
       ${CABAL} build \
