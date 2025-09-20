@@ -62,6 +62,8 @@ requirements:
         - m2-unzip
         - m2-which
   host:
+    - if: osx
+      then: libffi
     - if: linux
       then:
         - gmp
