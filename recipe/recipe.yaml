@@ -33,7 +33,7 @@ requirements:
     - ${{ compiler('c') }}
     - ${{ stdlib('c') }}
     - binutils
-    - ghc-bootstrap ==9.6.7
+    - ghc-bootstrap ==9.6.7 h68ab1c8_5
     - pkg-config
     - zlib
 

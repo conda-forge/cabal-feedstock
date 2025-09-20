@@ -43,31 +43,8 @@ main() {
     export CABAL_CONFIG_FLAGS="--enable-static --disable-shared --ghc-options=-static"
     
   elif [[ "${target_platform}" == "osx-"* ]]; then
-    CABAL_CONFIG_FLAGS="--ghc-options=-optl-Wl,-dead_strip"
-    CABAL_CONFIG_FLAGS="${CABAL_CONFIG_FLAGS} --disable-library-profiling"
-    CABAL_CONFIG_FLAGS="${CABAL_CONFIG_FLAGS} --enable-shared"
-    CABAL_CONFIG_FLAGS="${CABAL_CONFIG_FLAGS} --disable-static"
-    export CABAL_CONFIG_FLAGS
+    export CABAL_CONFIG_FLAGS="--ghc-options=-optl-Wl,-dead_strip"
 
-    # export MACOSX_DEPLOYMENT_TARGET="10.13"
-    # export LDFLAGS="-L${BUILD_PREFIX}/lib -L${PREFIX}/lib ${LDFLAGS:-}"
-    # export LIBRARY_PATH="${BUILD_PREFIX}/lib:${PREFIX}/lib:${LIBRARY_PATH:-}"
-    
-    settings_file="${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
-    sed -i -E "s#-(L|rpath,)/#-\1\$topdir/#g" "${settings_file}"
-
-    # sed -i -E "s#(ld flags\", \")#\1 -v#" "${settings_file}"
-    # sed -i -E "s#(C compiler link flags\", \")(.*\")#\1 -v -B${BUILD_PREFIX}/bin -L${BUILD_PREFIX}/lib -L${PREFIX}/lib \2#" "${settings_file}"
-    sed -i -E "s#(ar command\", \").*\"#\1/usr/bin/ar\"#" "${settings_file}"
-    # sed -i -E "s#(ar flags\", \")qcls\"#\1vrc\"#" "${settings_file}"
-    sed -i -E "s#(ranlib command\", \").*\"#\1/usr/bin/ranlib\"#" "${settings_file}"
-
-    # sed -i -E "s#(\"LLVM llc command\", \")(.*\")#\1x86_64-apple-darwin13.4.0-\2#" "${settings_file}"
-    # sed -i -E "s#(\"LLVM opt command\", \")(.*\")#\1x86_64-apple-darwin13.4.0-\2#" "${settings_file}"
-    # sed -i -E "s#(\"LLVM clang command\", \")(.*\")#\1x86_64-apple-darwin13.4.0-\2#" "${settings_file}"
-
-    # cat "${settings_file}"
-    
   elif [[ "${target_platform}" == "linux-64" ]]; then
     # Correct the libc.so script to avoid trying to load /lib64/libc.so.6
     sysroot_libc_script="${BUILD_PREFIX}/x86_64-conda-linux-gnu/sysroot/usr/lib64/libc.so"
@@ -123,23 +100,6 @@ constraints:
 EOF
   fi
   
-  # Add architecture flags for macOS to ensure consistent compilation
-#   if [[ "${target_platform}" == "osx-"* ]]; then
-#     cat >> cabal.release.constraints.project << EOF
-#
-# library-profiling: False
-# shared: True
-# static: False
-# executable-static: True
-# split-sections: False
-# split-objs: False
-#
-# package *
-#   shared: True
-#   static: False
-# EOF
-#   fi
-
   # Try building with bootstrap cabal
   if ! install_cabal "${PREFIX}/bin"; then
   
