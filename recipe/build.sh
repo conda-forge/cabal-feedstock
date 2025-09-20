@@ -56,17 +56,17 @@ main() {
     settings_file="${BUILD_PREFIX}"/ghc-bootstrap/lib/ghc-9.6.7/lib/settings
     sed -i -E "s#-(L|rpath,)/#-\1\$topdir/#g" "${settings_file}"
 
-    sed -i -E "s#(ld flags\", \")#\1 -v#" "${settings_file}"
-    sed -i -E "s#(C compiler link flags\", \")(.*\")#\1 -v -B${BUILD_PREFIX}/bin -L${BUILD_PREFIX}/lib -L${PREFIX}/lib \2#" "${settings_file}"
+    # sed -i -E "s#(ld flags\", \")#\1 -v#" "${settings_file}"
+    # sed -i -E "s#(C compiler link flags\", \")(.*\")#\1 -v -B${BUILD_PREFIX}/bin -L${BUILD_PREFIX}/lib -L${PREFIX}/lib \2#" "${settings_file}"
     sed -i -E "s#(ar command\", \").*\"#\1/usr/bin/ar\"#" "${settings_file}"
     # sed -i -E "s#(ar flags\", \")qcls\"#\1vrc\"#" "${settings_file}"
     sed -i -E "s#(ranlib command\", \").*\"#\1/usr/bin/ranlib\"#" "${settings_file}"
 
-    sed -i -E "s#(\"LLVM llc command\", \")(.*\")#\1x86_64-apple-darwin13.4.0-\2#" "${settings_file}"
-    sed -i -E "s#(\"LLVM opt command\", \")(.*\")#\1x86_64-apple-darwin13.4.0-\2#" "${settings_file}"
-    sed -i -E "s#(\"LLVM clang command\", \")(.*\")#\1x86_64-apple-darwin13.4.0-\2#" "${settings_file}"
+    # sed -i -E "s#(\"LLVM llc command\", \")(.*\")#\1x86_64-apple-darwin13.4.0-\2#" "${settings_file}"
+    # sed -i -E "s#(\"LLVM opt command\", \")(.*\")#\1x86_64-apple-darwin13.4.0-\2#" "${settings_file}"
+    # sed -i -E "s#(\"LLVM clang command\", \")(.*\")#\1x86_64-apple-darwin13.4.0-\2#" "${settings_file}"
 
-    cat "${settings_file}"
+    # cat "${settings_file}"
     
   elif [[ "${target_platform}" == "linux-64" ]]; then
     # Correct the libc.so script to avoid trying to load /lib64/libc.so.6
