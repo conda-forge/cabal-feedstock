@@ -157,6 +157,8 @@ EOF
       echo "=== Checking what was built after happy-lib ==="
       find ~/.local/state/cabal/store -name "*hppy*" -type d
 
+      ln -s ${BUILD_PREFIX}/bin/x86_64-apple-darwin13.4.0-ld ${BUILD_PREFIX}/bin/ld
+
       ${CABAL} build \
       --ghc-options="-v -dynamic -v -optl-Wl,-dead_strip" \
       --disable-library-profiling \
@@ -168,7 +170,6 @@ EOF
       find /Users/runner/.local/state/cabal/store/ghc-9.6.7/ -name "libHShppy*.a" | while read -r library; do
         echo "."; echo ".";  echo "."
         echo "DBG: ${library}"
-        ls -l ${PREFIX}/lib && (cd ${PREFIX}/lib && pwd) || true
         /Users/runner/miniforge3/bin/ld -v || true
         ${BUILD_PREFIX}/bin/ld -v || true
         file "${library}"
