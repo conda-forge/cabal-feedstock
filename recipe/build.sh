@@ -58,6 +58,7 @@ main() {
 
     sed -i -E "s#(ld flags\", \")#\1 -v#" "${settings_file}"
     sed -i -E "s#(C compiler link flags\", \")(.*\")#\1 -v -B${BUILD_PREFIX}/bin -L${BUILD_PREFIX}/lib -L${PREFIX}/lib \2#" "${settings_file}"
+    sed -i -E "s#(ar command\", \").*\"#\1ar\"#" "${settings_file}"
     sed -i -E "s#(ar flags\", \")qcls\"#\1vrc\"#" "${settings_file}"
 
     sed -i -E "s#(\"LLVM llc command\", \")(.*\")#\1x86_64-apple-darwin13.4.0-\2#" "${settings_file}"
